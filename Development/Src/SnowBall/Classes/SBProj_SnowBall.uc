@@ -107,10 +107,10 @@ defaultproperties
 	Physics=PHYS_Falling
 
 	Damage=30
-	DamageRadius=20
+	DamageRadius=0
 	MomentumTransfer=30000
 
-	MyDamageType=class'UTDmgType_ShockBall'
+	MyDamageType=class'SBDmgType_SnowBall'
 	LifeSpan=0.0
 
 	bCollideWorld=true
