@@ -1,0 +1,28 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <UccPath>C:\UDK\UDK-2010-02\Binaries\Win32\UDK.exe</UccPath>
+    <UccUserPath>
+    </UccUserPath>
+    <ReferenceSourcePath>C:\UDK\UDK-2010-02\Development\Src</ReferenceSourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <StartProgram>C:\UDK\UDK-2010-02\Binaries\Win32\UDK.exe</StartProgram>
+    <CmdArgs>
+    </CmdArgs>
+    <LoadMapAtStartup>True</LoadMapAtStartup>
+    <StartupMap>DM-Maze</StartupMap>
+    <LoadGameType>True</LoadGameType>
+    <UserGameType>SnowBall.SBGame_KotC</UserGameType>
+    <NoSound>False</NoSound>
+    <NoStartupMovies>True</NoStartupMovies>
+    <UseUnpublished>True</UseUnpublished>
+    <ForceWindowedMode>True</ForceWindowedMode>
+    <WindowWidth>1280</WindowWidth>
+    <WindowHeight>720</WindowHeight>
+    <ShowLogWindow>True</ShowLogWindow>
+    <LogWindowX>0</LogWindowX>
+    <LogWindowY>0</LogWindowY>
+    <LogToFile>False</LogToFile>
+    <LogFile>C:\UDK\UDK-2010-02\Development\Src\SnowBall\log.txt</LogFile>
+  </PropertyGroup>
+</Project>

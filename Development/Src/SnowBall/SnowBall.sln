@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{E17AB4A1-DF35-4579-9E91-0CFFBFB6391A}") = "SnowBall", "SnowBall.ucproj", "{7FEA3C39-81E7-4D4A-8BFD-BF542920916A}"
+EndProject
+Global
+	GlobalSection(MercurialSourceControlSolutionProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FEA3C39-81E7-4D4A-8BFD-BF542920916A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7FEA3C39-81E7-4D4A-8BFD-BF542920916A}.Debug|Win32.Build.0 = Debug|Win32
+		{7FEA3C39-81E7-4D4A-8BFD-BF542920916A}.Release|Win32.ActiveCfg = Release|Win32
+		{7FEA3C39-81E7-4D4A-8BFD-BF542920916A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

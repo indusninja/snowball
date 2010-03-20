@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>True</DebugSymbols>
+    <UccUseUnpublished>False</UccUseUnpublished>
+    <UccMultiPackageBuild>False</UccMultiPackageBuild>
+    <BuildArgs>
+    </BuildArgs>
+    <UccPackageOrder>Classes</UccPackageOrder>
+    <OverrideScriptPath>True</OverrideScriptPath>
+    <UccScriptsPath>C:\UDK\UDK-2010-02\UTGame\Script</UccScriptsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+    <ProductVersion>1.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7fea3c39-81e7-4d4a-8bfd-bf542920916a}</ProjectGuid>
+    <OutputType>UserMod</OutputType>
+    <ProjectType>UnrealScript</ProjectType>
+    <RootNamespace>SnowBall</RootNamespace>
+    <AssemblyName>SnowBall</AssemblyName>
+    <Name>SnowBall</Name>
+    <TargetGame>UnrealEngine 3 Mod</TargetGame>
+    <SccProjectName>
+    </SccProjectName>
+    <SccProvider>
+    </SccProvider>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <UccUseUnpublished>False</UccUseUnpublished>
+    <UseUnpublished>False</UseUnpublished>
+    <ForceWindowedMode>True</ForceWindowedMode>
+    <WindowWidth>1024</WindowWidth>
+    <WindowHeight>768</WindowHeight>
+    <ShowLogWindow>False</ShowLogWindow>
+    <LogToFile>False</LogToFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <UccUseUnpublished>False</UccUseUnpublished>
+    <UseUnpublished>False</UseUnpublished>
+    <ForceWindowedMode>False</ForceWindowedMode>
+    <ShowLogWindow>False</ShowLogWindow>
+    <LogToFile>False</LogToFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="*\Classes\*.uc" />
+    <Compile Include="Classes\SBBot_Custom.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBProj_SnowBall.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBWeap_SnowBallThrow.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBGame_KotC.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBPlayerController_ThirdPerson.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="**\*.uci" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes" />
+  </ItemGroup>
+  <ItemGroup>
+    <Config Include="..\..\..\UTGame\Config\UTEngine.ini">
+      <Link>UTEngine.ini</Link>
+    </Config>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\PixelMine\UnrealScript.targets" />
+</Project>
