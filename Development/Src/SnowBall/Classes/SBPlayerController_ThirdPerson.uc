@@ -9,48 +9,41 @@ var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
-
+const AmmoRate=1;
 
 event PlayerTick(float DeltaTime)
 {
 	super.PlayerTick(DeltaTime);
-	
-	
-	`log("Material: "$SBBot_Custom(self.pawn).GetAmmoMaterial());
 
-
-	if(SBBot_Custom(self.pawn).GetAmmoMaterial()=='')
+	if(Pawn!=None)
 	{
-		SBBot_Custom(self.pawn).GroundSpeed=50;
+		if(string(SBBot_Custom(Pawn).GetAmmoMaterial()) == "MAT_SnowWall")
+		{
+			Pawn.GroundSpeed = 550;
+			Pawn.Weapon.AddAmmo(AmmoRate);
+		}
+		else
+		{	
+			Pawn.GroundSpeed = 50;
+		}
 	}
-	else
-	{
-		SBBot_Custom(self.pawn).GroundSpeed=550;
-
-		//UTInventoryManager(SBBot_Custom(self.pawn).InvManager).HasInventoryOfClass(class'SnowBall.SBWeap_SnowBallThrow');
-		UTWeapon(UTInventoryManager(SBBot_Custom(self.pawn).InvManager).HasInventoryOfClass(class'SnowBall.SBWeap_SnowBallThrow')).AddAmmo(2);
-		
-	}
-
-
 }
-
 
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();
-	SetCameraMode('ThirdPerson');
-	resetMesh();
+	//SetCameraMode('ThirdPerson');
+	//resetMesh();
 }
 
 // Sets the Pawns Mesh to the resources speced in the DefaultProperties
 public function resetMesh()
 {
-	self.Pawn.Mesh.SetSkeletalMesh(defaultMesh);
-	self.Pawn.Mesh.SetMaterial(0,defaultMaterial0);
-	self.Pawn.Mesh.SetPhysicsAsset(defaultPhysicsAsset );
-	self.Pawn.Mesh.AnimSets=defaultAnimSet;
-	self.Pawn.Mesh.SetAnimTreeTemplate(defaultAnimTree);
+	Pawn.Mesh.SetSkeletalMesh(defaultMesh);
+	Pawn.Mesh.SetMaterial(0,defaultMaterial0);
+	Pawn.Mesh.SetPhysicsAsset(defaultPhysicsAsset );
+	Pawn.Mesh.AnimSets=defaultAnimSet;
+	Pawn.Mesh.SetAnimTreeTemplate(defaultAnimTree);
 }
 
 // Called at RestartPlayer by GameType

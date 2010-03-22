@@ -7,7 +7,7 @@
     <BuildArgs>-full</BuildArgs>
     <UccPackageOrder>Classes</UccPackageOrder>
     <OverrideScriptPath>True</OverrideScriptPath>
-    <UccScriptsPath>C:\UDK\UDK-2010-02\UTGame\Script</UccScriptsPath>
+    <UccScriptsPath>C:\UDK\UDK-2010-03\UTGame\Script</UccScriptsPath>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>

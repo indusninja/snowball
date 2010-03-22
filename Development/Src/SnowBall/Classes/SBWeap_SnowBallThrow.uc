@@ -406,7 +406,7 @@ defaultproperties
 	Begin Object Name=FirstPersonMesh
 		SkeletalMesh=SkeletalMesh'WP_ShockRifle.Mesh.SK_WP_ShockRifle_1P'
 		AnimSets(0)=AnimSet'WP_ShockRifle.Anim.K_WP_ShockRifle_1P_Base'
-		Animations=MeshSequenceA
+		//Animations=MeshSequenceA
 		Rotation=(Yaw=-16384)
 		FOV=60.0
 	End Object
