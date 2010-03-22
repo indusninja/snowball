@@ -9,6 +9,29 @@ var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
+
+
+event PlayerTick(float DeltaTime)
+{
+	super.PlayerTick(DeltaTime);
+	
+	
+	`log("Material: "$SBBot_Custom(self.pawn).GetAmmoMaterial());
+
+	if(SBBot_Custom(self.pawn).GetAmmoMaterial()=='')
+	{
+		SBBot_Custom(self.pawn).GroundSpeed=50;
+	}
+	else
+	{
+		SBBot_Custom(self.pawn).GroundSpeed=550;
+		UTWeapon.AddAmmo(2);
+	}
+
+
+}
+
+
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();

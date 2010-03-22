@@ -4,8 +4,7 @@
     <DebugSymbols>True</DebugSymbols>
     <UccUseUnpublished>False</UccUseUnpublished>
     <UccMultiPackageBuild>False</UccMultiPackageBuild>
-    <BuildArgs>
-    </BuildArgs>
+    <BuildArgs>-full</BuildArgs>
     <UccPackageOrder>Classes</UccPackageOrder>
     <OverrideScriptPath>True</OverrideScriptPath>
     <UccScriptsPath>C:\UDK\UDK-2010-02\UTGame\Script</UccScriptsPath>

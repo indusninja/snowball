@@ -26,13 +26,14 @@ simulated function PostBeginPlay()
 	{
 		Game.PlayerControllerClass=Class'SnowBall.SBPlayerController_ThirdPerson';
 	}
+
 }
 
 DefaultProperties
 {
 	PlayerControllerClass=Class'SnowBall.SBPlayerController_ThirdPerson'
 	DefaultPawnClass=class'SnowBall.SBBot_Custom'
-	bAutoNumBots=true
+	bAutoNumBots=false
 	MaxPlayersAllowed=4
 	DefaultInventory(0)=class'SnowBall.SBWeap_SnowBallThrow'
 }

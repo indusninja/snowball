@@ -1,12 +1,12 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <UccPath>C:\UDK\UDK-2010-02\Binaries\Win32\UDK.exe</UccPath>
+    <UccPath>C:\UDK\UDK-2010-03\Binaries\Win32\UDK.exe</UccPath>
     <UccUserPath>
     </UccUserPath>
-    <ReferenceSourcePath>C:\UDK\UDK-2010-02\Development\Src</ReferenceSourcePath>
+    <ReferenceSourcePath>C:\UDK\UDK-2010-03\Development\Src</ReferenceSourcePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <StartProgram>C:\UDK\UDK-2010-02\Binaries\Win32\UDK.exe</StartProgram>
+    <StartProgram>C:\UDK\UDK-2010-03\Binaries\Win32\UDK.exe</StartProgram>
     <CmdArgs>
     </CmdArgs>
     <LoadMapAtStartup>True</LoadMapAtStartup>
