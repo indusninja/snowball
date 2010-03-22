@@ -18,6 +18,7 @@ event PlayerTick(float DeltaTime)
 	
 	`log("Material: "$SBBot_Custom(self.pawn).GetAmmoMaterial());
 
+
 	if(SBBot_Custom(self.pawn).GetAmmoMaterial()=='')
 	{
 		SBBot_Custom(self.pawn).GroundSpeed=50;
@@ -25,7 +26,10 @@ event PlayerTick(float DeltaTime)
 	else
 	{
 		SBBot_Custom(self.pawn).GroundSpeed=550;
-		UTWeapon.AddAmmo(2);
+
+		//UTInventoryManager(SBBot_Custom(self.pawn).InvManager).HasInventoryOfClass(class'SnowBall.SBWeap_SnowBallThrow');
+		UTWeapon(UTInventoryManager(SBBot_Custom(self.pawn).InvManager).HasInventoryOfClass(class'SnowBall.SBWeap_SnowBallThrow')).AddAmmo(2);
+		
 	}
 
 

@@ -11,17 +11,16 @@ var PhysicsAsset defaultPhysicsAsset;
 
 simulated function name GetAmmoMaterial()
 {
-	//local vector HitLocation, HitNormal;
+	local vector HitLocation, HitNormal;
 	local TraceHitInfo HitInfo;
-	//local UTPhysicalMaterialProperty PhysicalProperty;
-	//local actor HitActor;
-	//local float TraceDist;
+	local UTPhysicalMaterialProperty PhysicalProperty;
+	local actor HitActor;
+	local float TraceDist;
 
-	//TraceDist = 1.5 * GetCollisionHeight();
-
-	//`log("MATERIAL ACCESSED!!!: "$PhysicalProperty.MaterialType);
-	//HitActor = Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
-	
+	TraceDist = 1.5 * GetCollisionHeight();
+	`log("MATERIAL ACCESSED!!!: "$PhysicalProperty.MaterialType);
+	HitActor = Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
+	return HitInfo.Material.Name;
 	//if ( WaterVolume(HitActor) != None )
 	//{
 	//	return (Location.Z - HitLocation.Z < 0.33*TraceDist) ? 'Water' : 'ShallowWater';
@@ -39,12 +38,6 @@ simulated function name GetAmmoMaterial()
 	//	//}
 	//}
 	//return '';
-	//
-
-	if ( HitInfo.Material.Name != '' )
-		return HitInfo.Material.Name;
-	else
-		return '';
 
 }
 
