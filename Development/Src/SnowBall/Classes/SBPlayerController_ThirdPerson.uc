@@ -10,21 +10,29 @@ var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
 const AmmoRate=1;
+var int BasePawnSpeed;
+var int FastPawnSpeed;
 
 event PlayerTick(float DeltaTime)
 {
+	local string materialName;
+
 	super.PlayerTick(DeltaTime);
 
 	if(Pawn!=None)
 	{
-		if(string(SBBot_Custom(Pawn).GetAmmoMaterial()) == "MAT_SnowWall")
+		materialName = string(SBBot_Custom(Pawn).GetAmmoMaterial());
+
+		//`Log("Material: "$materialName);
+
+		if((materialName == "MAT_SnowWall")||(materialName == "Snow01"))
 		{
-			Pawn.GroundSpeed = 550;
+			Pawn.GroundSpeed = BasePawnSpeed;
 			Pawn.Weapon.AddAmmo(AmmoRate);
 		}
 		else
 		{	
-			Pawn.GroundSpeed = 50;
+			Pawn.GroundSpeed = FastPawnSpeed;
 		}
 	}
 }
@@ -44,6 +52,7 @@ public function resetMesh()
 	Pawn.Mesh.SetPhysicsAsset(defaultPhysicsAsset );
 	Pawn.Mesh.AnimSets=defaultAnimSet;
 	Pawn.Mesh.SetAnimTreeTemplate(defaultAnimTree);
+	Pawn.GroundSpeed=BasePawnSpeed;
 }
 
 // Called at RestartPlayer by GameType
@@ -60,6 +69,8 @@ public function rSetCameraMode(name cameraSetting)
 
 DefaultProperties
 {
+	BasePawnSpeed=300;
+	FastPawnSpeed=400;
 	defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
 	defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 	defaultAnimSet(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'

@@ -10,7 +10,7 @@ class SBGame_KotC extends UTGame
 function RestartPlayer(Controller aPlayer)
 {
 	super.RestartPlayer(aPlayer);
-	`Log("Player restarted");
+	//`Log("Player restarted");
 	//currentPlayer = SBPlayerController_ThirdPerson(aPlayer);
 	//currentPlayer.resetMesh();
 	SBPlayerController_ThirdPerson(aPlayer).rSetBehindView(true);

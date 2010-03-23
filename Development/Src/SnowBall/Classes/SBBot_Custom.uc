@@ -17,10 +17,14 @@ simulated function name GetAmmoMaterial()
 
 	TraceDist = 1.5 * GetCollisionHeight();
 	HitActor = Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
+	
 	if(HitInfo.Material!=None)
 		return HitInfo.Material.Name;
 	else
+	{
+		`Log("Material: "$HitInfo.PhysMaterial.Name);
 		return 'None';
+	}
 }
 
 simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)

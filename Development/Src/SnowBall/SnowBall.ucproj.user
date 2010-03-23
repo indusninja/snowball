@@ -10,7 +10,7 @@
     <CmdArgs>
     </CmdArgs>
     <LoadMapAtStartup>True</LoadMapAtStartup>
-    <StartupMap>DM-Maze</StartupMap>
+    <StartupMap>SB_Hill_Playground</StartupMap>
     <LoadGameType>True</LoadGameType>
     <UserGameType>SnowBall.SBGame_KotC</UserGameType>
     <NoSound>False</NoSound>
