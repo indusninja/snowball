@@ -25,7 +25,7 @@ event PlayerTick(float DeltaTime)
 
 		//`Log("Material: "$materialName);
 
-		if((materialName == "MAT_SnowWall")||(materialName == "Snow01"))
+		if(materialName == "Snow")
 		{
 			Pawn.GroundSpeed = BasePawnSpeed;
 			Pawn.Weapon.AddAmmo(AmmoRate);

@@ -34,6 +34,6 @@ DefaultProperties
 	PlayerControllerClass=Class'SnowBall.SBPlayerController_ThirdPerson'
 	DefaultPawnClass=class'SnowBall.SBBot_Custom'
 	bAutoNumBots=false
-	MaxPlayersAllowed=4
+	MaxPlayersAllowed=2
 	DefaultInventory(0)=class'SnowBall.SBWeap_SnowBallThrow'
 }
