@@ -15,11 +15,14 @@ const AmmoRate=1;
  * time the snow is picked up can be changed easily*/
 simulated function AmmoPickingTimer()
 {
+	local string material;
 
 
+	
 	if(Pawn!=None)
 	{
-		
+		material=string(SBBot_Custom(Pawn).GetAmmoMaterial());
+		`log("Material: "$material);
 		if(string(SBBot_Custom(Pawn).GetAmmoMaterial()) == "MAT_SnowWall")
 		{
 			Pawn.GroundSpeed = 550;
@@ -27,7 +30,7 @@ simulated function AmmoPickingTimer()
 		}
 		else
 		{	
-			Pawn.GroundSpeed = 50;
+			Pawn.GroundSpeed = 750;
 		}
 	}
 
@@ -55,7 +58,7 @@ exec function ConstructWall()
 		
 		
 		//loc.Z-=15;
-		loc.Z=Pawn.GetCollisionHeight()-35;//Placing Wall in the ground
+		loc.Z=Pawn.Location.Z-35;//Placing Wall in the ground
 		
 		Pawn.Spawn(class'SnowBall.SBActor_SnowWall',,,loc,rot);
 		Pawn.Weapon.AddAmmo(-2);

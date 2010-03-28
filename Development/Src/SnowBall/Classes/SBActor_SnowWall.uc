@@ -30,7 +30,8 @@ defaultproperties
 	// Set the role for the client
 	//
 	RemoteRole=ROLE_SimulatedProxy
-	
+
+	bCollideWorld=true
 	bStatic=false// Does not move or change over time. It is only safe to change this property in defaultproperties.
 	bNoDelete=false // Cannot be deleted during play.
 
