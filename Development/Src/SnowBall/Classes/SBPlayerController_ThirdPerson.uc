@@ -10,36 +10,61 @@ var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
 const AmmoRate=1;
-var int BasePawnSpeed;
-var int FastPawnSpeed;
 
-event PlayerTick(float DeltaTime)
+/*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
+ * time the snow is picked up can be changed easily*/
+simulated function AmmoPickingTimer()
 {
-	local string materialName;
 
-	super.PlayerTick(DeltaTime);
 
 	if(Pawn!=None)
 	{
-		materialName = string(SBBot_Custom(Pawn).GetAmmoMaterial());
-
-		//`Log("Material: "$materialName);
-
-		if(materialName == "Snow")
+		
+		if(string(SBBot_Custom(Pawn).GetAmmoMaterial()) == "MAT_SnowWall")
 		{
-			Pawn.GroundSpeed = BasePawnSpeed;
+			Pawn.GroundSpeed = 550;
 			Pawn.Weapon.AddAmmo(AmmoRate);
 		}
 		else
 		{	
-			Pawn.GroundSpeed = FastPawnSpeed;
+			Pawn.GroundSpeed = 50;
 		}
 	}
+
 }
 
+
+/*Function responsible of placing a Wall when the key X is pressed*/
+exec function ConstructWall()
+{
+		local vector loc;
+		local Rotator rot;
+
+		if(Pawn.Weapon.HasAmmo(0,20))
+		{
+		loc = Pawn.Location + normal(vector(Pawn.Rotation))*200; 
+		//loc.Y-=90;
+		//loc.X-=90;
+		//loc.X = Pawn.Location + normal(vector(Pawn.Rotation)).X*200; 
+		//loc.Y=Pawn.Location.Y - normal(vector(Pawn.Rotation)).Y*200;
+		
+		//Rotation based on Tait-Bryan angles... nice...
+		rot.Pitch=Pawn.Rotation.Pitch ;
+		rot.Roll=Pawn.Rotation.Roll;
+		rot.Yaw=Pawn.Rotation.Yaw + (90.0f * DegToRad) * RadToUnrRot;
+		
+		
+		//loc.Z-=15;
+		loc.Z=Pawn.GetCollisionHeight()-35;//Placing Wall in the ground
+		
+		Pawn.Spawn(class'SnowBall.SBActor_SnowWall',,,loc,rot);
+		Pawn.Weapon.AddAmmo(-2);
+		}
+}
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();
+	SetTimer(1,true,'AmmoPickingTimer');
 	//SetCameraMode('ThirdPerson');
 	//resetMesh();
 }
@@ -52,7 +77,6 @@ public function resetMesh()
 	Pawn.Mesh.SetPhysicsAsset(defaultPhysicsAsset );
 	Pawn.Mesh.AnimSets=defaultAnimSet;
 	Pawn.Mesh.SetAnimTreeTemplate(defaultAnimTree);
-	Pawn.GroundSpeed=BasePawnSpeed;
 }
 
 // Called at RestartPlayer by GameType
@@ -69,8 +93,6 @@ public function rSetCameraMode(name cameraSetting)
 
 DefaultProperties
 {
-	BasePawnSpeed=300;
-	FastPawnSpeed=400;
 	defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
 	defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 	defaultAnimSet(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'

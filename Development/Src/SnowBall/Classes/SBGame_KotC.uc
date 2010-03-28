@@ -10,7 +10,7 @@ class SBGame_KotC extends UTGame
 function RestartPlayer(Controller aPlayer)
 {
 	super.RestartPlayer(aPlayer);
-	//`Log("Player restarted");
+	`Log("Player restarted");
 	//currentPlayer = SBPlayerController_ThirdPerson(aPlayer);
 	//currentPlayer.resetMesh();
 	SBPlayerController_ThirdPerson(aPlayer).rSetBehindView(true);
@@ -33,7 +33,7 @@ DefaultProperties
 {
 	PlayerControllerClass=Class'SnowBall.SBPlayerController_ThirdPerson'
 	DefaultPawnClass=class'SnowBall.SBBot_Custom'
-	bAutoNumBots=false
-	MaxPlayersAllowed=2
+	//bAutoNumBots=false
+	//MaxPlayersAllowed=4
 	DefaultInventory(0)=class'SnowBall.SBWeap_SnowBallThrow'
 }

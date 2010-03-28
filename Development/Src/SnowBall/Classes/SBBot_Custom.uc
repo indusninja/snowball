@@ -10,44 +10,17 @@ var PhysicsAsset defaultPhysicsAsset;
 
 simulated function name GetAmmoMaterial()
 {
-	/*local vector HitLocation, HitNormal;
+	local vector HitLocation, HitNormal;
 	local TraceHitInfo HitInfo;
-	local actor HitActor;
+	//local actor HitActor;
 	local float TraceDist;
 
 	TraceDist = 1.5 * GetCollisionHeight();
-	HitActor = Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
-	
+	Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
 	if(HitInfo.Material!=None)
 		return HitInfo.Material.Name;
 	else
-	{
-		`Log("Material: "$HitInfo.PhysMaterial.Name);
 		return 'None';
-	}*/
-	local vector HitLocation, HitNormal;
-	local TraceHitInfo HitInfo;
-	local UTPhysicalMaterialProperty PhysicalProperty;
-	local actor HitActor;
-	local float TraceDist;
-
-	TraceDist = 1.5 * GetCollisionHeight();
-
-	HitActor = Trace(HitLocation, HitNormal, Location - TraceDist*vect(0,0,1), Location, false,, HitInfo, TRACEFLAG_PhysicsVolumes);
-	`Log("PhysMaterial: "$HitInfo.PhysMaterial);
-	if ( WaterVolume(HitActor) != None )
-	{
-		return (Location.Z - HitLocation.Z < 0.33*TraceDist) ? 'Water' : 'ShallowWater';
-	}
-	if (HitInfo.PhysMaterial != None)
-	{
-		PhysicalProperty = UTPhysicalMaterialProperty(HitInfo.PhysMaterial.GetPhysicalMaterialProperty(class'UTPhysicalMaterialProperty'));
-		if (PhysicalProperty != None)
-		{
-			return PhysicalProperty.MaterialType;
-		}
-	}
-	return '';
 }
 
 simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
@@ -62,7 +35,7 @@ simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
-	SpawnDefaultController();
+	//SpawnDefaultController();
 }
 
 defaultproperties
