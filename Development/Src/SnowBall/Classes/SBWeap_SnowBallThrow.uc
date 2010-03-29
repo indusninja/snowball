@@ -159,6 +159,9 @@ simulated state WeaponLoadAmmo
      */
     simulated function WeaponFireLoad()
     {
+        if (SnowballStrength < 1) {
+            ConsumeAmmo(CurrentFireMode);
+        }
         ProjectileFire();
         PlayFiringSound();
         InvManager.OwnerEvent('FiredWeapon');
@@ -388,7 +391,7 @@ defaultproperties
 	Spread(0)=0.0
 
 	SnowballStrength=1
-    MaxSnowballStrength=10
+    MaxSnowballStrength=5
 
 	//FiringStatesArray(0)=WeaponLoadAmmo
 	FiringStatesArray(1)=WeaponLoadAmmo

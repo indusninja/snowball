@@ -3,14 +3,14 @@
  */
 class SBProj_SnowBall extends UTProjectile;
 
-var() int           MaxRestingGlobStrength;
+//var() int           MaxRestingGlobStrength;
 var repnotify int   SnowballStrength;
 var() float         SnowballSpeed;
 
-var StaticMeshComponent SnowLandedMesh;
-var ParticleSystemComponent HitWallEffect;
+//var StaticMeshComponent SnowLandedMesh;
+//var ParticleSystemComponent HitWallEffect;
 
-var class<UTDamageType> GibDamageType;
+//var class<UTDamageType> GibDamageType;
 
 replication
 {
@@ -20,14 +20,7 @@ replication
 
 simulated event ReplicatedEvent(name VarName)
 {
-    if (VarName == 'RemainingRestTime')
-    {
-        if (!IsInState('OnGround'))
-        {
-            Landed(vector(Rotation), None);
-        }
-    }
-    else if (VarName == 'SnowballStrength')
+    if (VarName == 'SnowballStrength')
     {
         SetSnowballStrength(SnowballStrength);
     }
@@ -41,7 +34,8 @@ function InitSnow(SBWeap_SnowBallThrow FiringWeapon, int InSnowballStrength)
 {
     // adjust speed
     InSnowballStrength = Max(InSnowballStrength, 1);
-    Velocity = Normal(Velocity) * Speed * (0.4 + InSnowballStrength)/(1.35*InSnowballStrength);
+    Velocity = Normal(Velocity) * (Speed + (InSnowballStrength-1) * 200);
+    Damage = Damage + Damage / 10 * (InSnowballStrength-1);
 
     SetSnowballStrength(InSnowballStrength);
     //RestTime = Default.RestTime + 0.6*InSnowballStrength;
@@ -69,15 +63,15 @@ simulated function SetSnowballStrength( int NewStrength )
     }
 
     // set different damagetype for charged shots
-    if (SnowballStrength > 1)
+    /**if (SnowballStrength > 1)
     {
         MyDamageType = default.MyDamageType;
     }
     else
-    {
+    {*/
         //MyDamageType = class'SBProj_Snowball'.default.MyDamageType;
 		MyDamageType = default.MyDamageType;
-    }
+    //}
 }
 
 simulated function ProcessTouch(Actor Other, vector HitLocation, vector HitNormal)
