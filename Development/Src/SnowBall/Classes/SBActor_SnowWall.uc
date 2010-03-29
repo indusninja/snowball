@@ -41,7 +41,7 @@ defaultproperties
  
 
     Begin Object Name=FracturedStaticMeshComponent0 
-        StaticMesh=FracturedStaticMesh'PAK_SnowBall_v1.StaticMesh.S_LT_Buildings_SM_BunkerWallB_STR_FRACTURED'
+        StaticMesh=FracturedStaticMesh'PAK_SnowBall_v1.StaticMesh.SB_SnowWall_Fractured'
 
     End Object 
 	Components.Add(FracturedStaticMeshComponent0)

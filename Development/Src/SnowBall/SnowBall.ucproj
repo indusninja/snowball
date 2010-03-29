@@ -54,7 +54,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="*\Classes\*.uc" />
+    <Compile Include="Classes\SBActor_SnowWall.uc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Classes\SBBot_Custom.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBDmgType_SnowBall.uc">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\SBProj_SnowBall.uc">
@@ -77,6 +83,9 @@
   <ItemGroup>
     <Config Include="..\..\..\UTGame\Config\UTEngine.ini">
       <Link>UTEngine.ini</Link>
+    </Config>
+    <Config Include="..\..\..\UTGame\Config\UTInput.ini">
+      <Link>UTInput.ini</Link>
     </Config>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\PixelMine\UnrealScript.targets" />
