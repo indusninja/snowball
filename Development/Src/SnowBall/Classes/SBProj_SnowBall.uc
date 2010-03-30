@@ -94,7 +94,7 @@ defaultproperties
 	ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
 	Speed=1000
         SpeedIncrement=0.4
-	MaxSpeed=1000
+	MaxSpeed=7000
 	MaxEffectDistance=7000.0
 	bCheckProjectileLight=true
 	ProjectileLightClass=class'UTGame.UTShockBallLight'

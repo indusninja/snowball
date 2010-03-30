@@ -1,0 +1,30 @@
+SBWeap_SNowballWeapon:
+This is the weapon that the player has by default to allow him to throw snowballs.
+The following default properties can be changed for useful results
+
+-ShotCost(variable) - the amount of ammunition that each firing mode consumes (per second for alt fire)
+-FireInterval(variable) - the seconds from a shot being fire before it can be fired again
+-MaxSnowballStrength - the maximum amount that the altfire can be charged.
+-FiringStatesArray(variable) - Determines whether the specific fire mode is default or should use the charging mode
+-EquipTime - how long it takes to equip this weapon before it is ready to fire (should match animation's duration)
+-PutDownTime - same, but for unequipping the weapon
+
+-There's a bunch of properties controlling the models and animations
+-There's also a bunch of properties controlling crosshair appearance and other UI elements
+
+----------------------------------------------------------------
+
+SBProj_Snowball:
+This is the snowball projectile fired by the snowball "weapon"
+Properties that can be useful
+
+-Speed - the default speed that the projectile is launched at
+-SpeedIncrement - the fraction of the Speed variable that is added to the speed for each additional second of charge
+-MaxSpeed - the maximum speed attainable
+-Tossz - The rate at which the projectile loses height (stands in for complex simulation of gravity vs. proj mass)
+-MomentumTrasfer - How much physics impact the projectile has (stands in for complex simulation of proj mass and velocity)
+-Damage - how much damage is caused by impact
+-DamageIncrement - the fraction of the Damage variable that is added to damage for each additional second of charge
+-DamageRadius - the radius around the point of impact that this damage is applied (WARNING! Bugged with breakable walls right now)
+
+-There's a bunch of other properties that control the model and particles effects used by the snowball.
