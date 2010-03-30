@@ -3,14 +3,10 @@
  */
 class SBProj_SnowBall extends UTProjectile;
 
-//var() int           MaxRestingGlobStrength;
 var repnotify int   SnowballStrength;
 var() float         SnowballSpeed;
-
-//var StaticMeshComponent SnowLandedMesh;
-//var ParticleSystemComponent HitWallEffect;
-
-//var class<UTDamageType> GibDamageType;
+var float           SpeedIncrement;
+var float           DamageIncrement;
 
 replication
 {
