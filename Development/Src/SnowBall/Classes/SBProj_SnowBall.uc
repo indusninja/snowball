@@ -34,8 +34,8 @@ function InitSnow(SBWeap_SnowBallThrow FiringWeapon, int InSnowballStrength)
 {
     // adjust speed
     InSnowballStrength = Max(InSnowballStrength, 1);
-    Velocity = Normal(Velocity) * (Speed + (InSnowballStrength-1) * 200);
-    Damage = Damage + Damage / 10 * (InSnowballStrength-1);
+    Velocity = Normal(Velocity) * (Speed + (InSnowballStrength-1) * Speed * SpeedIncrement);
+    Damage = Damage + Damage * DamageIncrement * (InSnowballStrength-1);
 
     SetSnowballStrength(InSnowballStrength);
     //RestTime = Default.RestTime + 0.6*InSnowballStrength;
@@ -93,6 +93,7 @@ defaultproperties
 	ProjFlightTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
 	ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
 	Speed=1000
+        SpeedIncrement=0.4
 	MaxSpeed=1000
 	MaxEffectDistance=7000.0
 	bCheckProjectileLight=true
@@ -101,6 +102,7 @@ defaultproperties
 	Physics=PHYS_Falling
 
 	Damage=30
+        DamageIncrement=0.1
 	DamageRadius=0
 	MomentumTransfer=30000
 
