@@ -75,11 +75,19 @@ simulated function PostBeginPlay()
 // Sets the Pawns Mesh to the resources speced in the DefaultProperties
 public function resetMesh()
 {
+	local PostProcessChain coolShade;
+
 	Pawn.Mesh.SetSkeletalMesh(defaultMesh);
 	Pawn.Mesh.SetMaterial(0,defaultMaterial0);
 	Pawn.Mesh.SetPhysicsAsset(defaultPhysicsAsset );
 	Pawn.Mesh.AnimSets=defaultAnimSet;
 	Pawn.Mesh.SetAnimTreeTemplate(defaultAnimTree);
+
+	if (LocalPlayer(Player)!=none)
+	{
+			coolShade = PostProcessChain'SB_PostProcessing.PostProcess.DunDefScenePostProcess';
+			LocalPlayer(Player).InsertPostProcessingChain(coolShade,-1,false);
+	}
 }
 
 // Called at RestartPlayer by GameType

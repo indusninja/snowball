@@ -5,14 +5,14 @@
 class SBGame_KotC extends UTGame
 	config(SnowBall);
 
-//var SBPlayerController_ThirdPerson currentPlayer;
+var SBPlayerController_ThirdPerson currentPlayer;
 
 function RestartPlayer(Controller aPlayer)
 {
 	super.RestartPlayer(aPlayer);
 	`Log("Player restarted");
-	//currentPlayer = SBPlayerController_ThirdPerson(aPlayer);
-	//currentPlayer.resetMesh();
+	currentPlayer = SBPlayerController_ThirdPerson(aPlayer);
+	currentPlayer.resetMesh();
 	SBPlayerController_ThirdPerson(aPlayer).rSetBehindView(true);
 	SBPlayerController_ThirdPerson(aPlayer).rSetCameraMode('ThirdPerson');
 }
