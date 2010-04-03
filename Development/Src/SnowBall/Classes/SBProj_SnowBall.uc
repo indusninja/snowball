@@ -7,16 +7,27 @@ class SBProj_SnowBall extends UTProjectile
 var repnotify int   SnowballStrength;
 var() float         SnowballSpeed;
 var config float	SpeedIncrement;
-var config int  	SpeedBase;
+var config float  	SpeedBase;
 var config float	DamageIncrement;
-var config int	    DamageBase;
+var config float    DamageBase;
 var config float    GravityForce;
-var config int	    ImpactForce;
+var config float    ImpactForce;
 
 replication
 {
     if (bNetInitial)
         SnowballStrength;
+}
+
+simulated function PostBeginPlay()
+{
+	Super.PostBeginPlay();
+
+	// Set config values
+	//Speed = SpeedBase;
+	Damage = DamageBase;
+	TossZ = GravityForce;
+	MomentumTransfer = ImpactForce;
 }
 
 simulated event ReplicatedEvent(name VarName)
@@ -93,17 +104,17 @@ defaultproperties
 {
 	ProjFlightTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
 	ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
-	Speed=SpeedBase
+	Speed=1000
 	MaxSpeed=7000
 	MaxEffectDistance=7000.0
 	bCheckProjectileLight=true
 	ProjectileLightClass=class'UTGame.UTShockBallLight'
-	TossZ=GravityForce
+	TossZ=+245.0
 	Physics=PHYS_Falling
 
-	Damage=DamageBase
+	Damage=30
 	DamageRadius=0
-	MomentumTransfer=ImpactForce
+	MomentumTransfer=10000
 
 	MyDamageType=class'SBDmgType_SnowBall'
 	LifeSpan=0.0

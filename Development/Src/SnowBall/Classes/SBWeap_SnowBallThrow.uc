@@ -38,6 +38,16 @@ simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
     SkeletalMeshComponent(Mesh).AttachComponentToSocket(ChargingSystem,MuzzleFlashSocket);
+
+	// Set config values
+	AmmoCount = StandardAmmo;
+	LockerAmmoCount = LockerAmmo;
+	MaxAmmoCount = MaxAmmo;
+	FireInterval[0] = SnowballCooldown;
+	FireInterval[1] = SnowballCooldown;
+	ShotCost[0] = SnowballAmmoCost;
+	ShotCost[1] = SnowballAmmoCost;
+
 }
 
 /*********************************************************************************************
@@ -384,8 +394,8 @@ defaultproperties
 	WeaponProjectiles(0)=class'Snowball.SBProj_SnowBall'
 	WeaponProjectiles(1)=class'Snowball.SBProj_SnowBall'
 
-	FireInterval(0)=SnowballCooldown
-	FireInterval(1)=SnowballCooldown
+	FireInterval(0)=+0.5
+	FireInterval(1)=+0.5
 
 	InstantHitDamageTypes(0)=None
 	InstantHitDamageTypes(1)=None
@@ -393,8 +403,8 @@ defaultproperties
 	ShouldFireOnRelease(0)=0
     ShouldFireOnRelease(1)=0
 
-	ShotCost(0)=SnowballAmmoCost
-	ShotCost(1)=SnowballAmmoCost
+	ShotCost(0)=1
+	ShotCost(1)=1
 
 	Spread(0)=0.0
 
@@ -475,9 +485,9 @@ defaultproperties
 	/** Inventory properties */
 	bCanThrow=false
 
-	AmmoCount=StandardAmmo
-	LockerAmmoCount=LockerAmmo
-	MaxAmmoCount=MaxAmmo
+	AmmoCount=50
+	LockerAmmoCount=50
+	MaxAmmoCount=100
 
 	InventoryGroup=4
 	GroupWeight=0.5
