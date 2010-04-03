@@ -1,9 +1,9 @@
 class SBActor_SnowWall extends FracturedStaticMeshActor
-placeable;
-
-
+	placeable
+	config(SnowBall);
 
 var Vector Destination;
+var config name WallMeshName;
 
 /** Used to shut down actor on the server to reduce overhead. */
 simulated function PostBeginPlay()
@@ -19,11 +19,10 @@ simulated function PostBeginPlay()
 
 //Server replicates the wall location to the clients
 replication
-	{
-		if (Role<ROLE_Authority && bNetDirty)
-			Destination;
-		
-	}
+{
+	if (Role<ROLE_Authority && bNetDirty)
+		Destination;
+}
 
 defaultproperties
 {
@@ -37,15 +36,10 @@ defaultproperties
 
 	bReplicateRigidBodyLocation=true // replicate Location property even when in PHYS_RigidBody
 	bReplicateMovement=true // if true, replicate movement/location related properties
-	
- 
 
     Begin Object Name=FracturedStaticMeshComponent0 
         StaticMesh=FracturedStaticMesh'PAK_SnowBall_v1.StaticMesh.SB_SnowWall_Fractured'
+    End Object
 
-    End Object 
 	Components.Add(FracturedStaticMeshComponent0)
-
-
-
 }

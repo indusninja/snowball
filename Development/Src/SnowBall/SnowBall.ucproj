@@ -87,6 +87,9 @@
     <Config Include="..\..\..\UTGame\Config\UTInput.ini">
       <Link>UTInput.ini</Link>
     </Config>
+    <Config Include="..\..\..\UTGame\Config\UTSnowBall.ini">
+      <Link>UTSnowBall.ini</Link>
+    </Config>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\PixelMine\UnrealScript.targets" />
 </Project>

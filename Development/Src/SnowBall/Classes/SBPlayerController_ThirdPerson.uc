@@ -8,43 +8,42 @@ var AnimTree defaultAnimTree;
 var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
-
-const AmmoRate=1;
+var config int AmmoRate;
+var config int WallConstructionCost;
+var config float SlowCharacterSpeed;
+var config float MediumCharacterSpeed;
+var config float FastCharacterSpeed;
 
 /*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
  * time the snow is picked up can be changed easily*/
 simulated function AmmoPickingTimer()
 {
 	local string material;
-
-
 	
 	if(Pawn!=None)
 	{
 		material=string(SBBot_Custom(Pawn).GetAmmoMaterial());
 		`log("Material: "$material);
-		if(string(SBBot_Custom(Pawn).GetAmmoMaterial()) == "MAT_SnowWall")
+		if(material == "Snow")
 		{
-			Pawn.GroundSpeed = 550;
+			Pawn.GroundSpeed = SlowCharacterSpeed;
 			Pawn.Weapon.AddAmmo(AmmoRate);
 		}
 		else
 		{	
-			Pawn.GroundSpeed = 750;
+			Pawn.GroundSpeed = MediumCharacterSpeed;
 		}
 	}
-
 }
-
 
 /*Function responsible of placing a Wall when the key X is pressed*/
 exec function ConstructWall()
 {
-		local vector loc;
-		local Rotator rot;
+	local vector loc;
+	local Rotator rot;
 
-		if(Pawn.Weapon.HasAmmo(0,20))
-		{
+	if(Pawn.Weapon.HasAmmo(0,WallConstructionCost))
+	{
 		loc = Pawn.Location + normal(vector(Pawn.Rotation))*200; 
 		//loc.Y-=90;
 		//loc.X-=90;
@@ -56,13 +55,12 @@ exec function ConstructWall()
 		rot.Roll=Pawn.Rotation.Roll;
 		rot.Yaw=Pawn.Rotation.Yaw + (90.0f * DegToRad) * RadToUnrRot;
 		
-		
 		//loc.Z-=15;
 		loc.Z=Pawn.Location.Z-35;//Placing Wall in the ground
 		
 		Pawn.Spawn(class'SnowBall.SBActor_SnowWall',,,loc,rot);
-		Pawn.Weapon.AddAmmo(-2);
-		}
+		Pawn.Weapon.AddAmmo(-1*WallConstructionCost);
+	}
 }
 simulated function PostBeginPlay() 
 {
@@ -85,8 +83,8 @@ public function resetMesh()
 
 	if (LocalPlayer(Player)!=none)
 	{
-			coolShade = PostProcessChain'SB_PostProcessing.PostProcess.DunDefScenePostProcess';
-			LocalPlayer(Player).InsertPostProcessingChain(coolShade,-1,false);
+		coolShade = PostProcessChain'SB_PostProcessing.PostProcess.DunDefScenePostProcess';
+		LocalPlayer(Player).InsertPostProcessingChain(coolShade,-1,false);
 	}
 }
 

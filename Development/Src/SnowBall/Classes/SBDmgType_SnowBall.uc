@@ -5,8 +5,6 @@
 class SBDmgType_SnowBall extends UTDamageType
 	abstract;
 
-
-
 defaultproperties
 {
 	DamageWeaponClass=class'SBWeap_SnowBallThrow'
