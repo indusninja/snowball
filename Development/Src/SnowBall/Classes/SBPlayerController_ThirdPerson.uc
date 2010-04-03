@@ -27,7 +27,16 @@ simulated function AmmoPickingTimer()
 		if(material == "Snow")
 		{
 			Pawn.GroundSpeed = SlowCharacterSpeed;
-			Pawn.Weapon.AddAmmo(AmmoRate);
+
+			// Only pick up snow if not firing a weapon and crouched
+			if( !(Pawn.IsFiring()) && Pawn.bIsCrouched) {
+				// Also restrict to when not moving
+				if( (Pawn.Velocity.X == 0.0) &&
+					(Pawn.Velocity.Y == 0.0) &&
+					(Pawn.Velocity.Z == 0.0) ) {
+					Pawn.Weapon.AddAmmo(AmmoRate);
+					}
+			}
 		}
 		else
 		{	
