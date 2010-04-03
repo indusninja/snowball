@@ -15,6 +15,8 @@ simulated function name GetAmmoMaterial()
 	local UTPhysicalMaterialProperty PhysicalProperty;
 	local actor HitActor;
 	local float TraceDist;
+	local Terrain TerrainObject;
+	local Material MaterialFound;
 
 	TraceDist = 1.5 * GetCollisionHeight();
 
@@ -22,6 +24,18 @@ simulated function name GetAmmoMaterial()
 	if ( WaterVolume(HitActor) != None )
 	{
 		return (Location.Z - HitLocation.Z < 0.33*TraceDist) ? 'Water' : 'ShallowWater';
+	}
+	if ( Terrain(HitActor) != None )
+	{
+		//`log("Standing on Terrain!");
+		TerrainObject = Terrain(HitActor);
+		MaterialFound = Material(TerrainObject.Layers[0].Setup.Materials[0].Material.Material);
+		PhysicalProperty = UTPhysicalMaterialProperty(MaterialFound.PhysMaterial.GetPhysicalMaterialProperty(class'UTPhysicalMaterialProperty'));
+		//`log("Terrain Physical Material: "$TerrainObject.TerrainPhysMaterialOverride);
+		if (PhysicalProperty != None)
+		{
+			return PhysicalProperty.MaterialType;
+		}
 	}
 	if (HitInfo.PhysMaterial != None)
 	{
