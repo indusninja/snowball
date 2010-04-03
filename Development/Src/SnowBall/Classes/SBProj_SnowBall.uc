@@ -1,12 +1,17 @@
 /**
  * Copyright 1998-2010 Epic Games, Inc. All Rights Reserved.
  */
-class SBProj_SnowBall extends UTProjectile;
+class SBProj_SnowBall extends UTProjectile
+	config(SnowBall);
 
 var repnotify int   SnowballStrength;
 var() float         SnowballSpeed;
-var float           SpeedIncrement;
-var float           DamageIncrement;
+var config float	SpeedIncrement;
+var config int  	SpeedBase;
+var config float	DamageIncrement;
+var config int	    DamageBase;
+var config float    GravityForce;
+var config int	    ImpactForce;
 
 replication
 {
@@ -66,7 +71,7 @@ simulated function SetSnowballStrength( int NewStrength )
     else
     {*/
         //MyDamageType = class'SBProj_Snowball'.default.MyDamageType;
-		MyDamageType = default.MyDamageType;
+		//MyDamageType = default.MyDamageType;
     //}
 }
 
@@ -88,19 +93,17 @@ defaultproperties
 {
 	ProjFlightTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
 	ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
-	Speed=1000
-        SpeedIncrement=0.4
+	Speed=SpeedBase
 	MaxSpeed=7000
 	MaxEffectDistance=7000.0
 	bCheckProjectileLight=true
 	ProjectileLightClass=class'UTGame.UTShockBallLight'
-	TossZ=+245.0
+	TossZ=GravityForce
 	Physics=PHYS_Falling
 
-	Damage=30
-        DamageIncrement=0.1
+	Damage=DamageBase
 	DamageRadius=0
-	MomentumTransfer=30000
+	MomentumTransfer=ImpactForce
 
 	MyDamageType=class'SBDmgType_SnowBall'
 	LifeSpan=0.0

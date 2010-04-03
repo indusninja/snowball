@@ -2,11 +2,19 @@
  * Our stuff.
  */
 
-class SBWeap_SnowBallThrow extends UTWeapon;
+class SBWeap_SnowBallThrow extends UTWeapon
+	config(SnowBall);
+
+// Ammo & Firing
+var config int MaxAmmo;
+var config int StandardAmmo;
+var config int LockerAmmo;
+var config float SnowballCooldown;
+var config int SnowballAmmoCost;
 
 /** maximum strength a snowball can have */
-var int MaxSnowballStrength;
-var int SnowballStrength;
+var config int MaxSnowballStrength;
+var config int SnowballStrength;
 
 var SoundCue WeaponLoadSnd;
 
@@ -376,8 +384,8 @@ defaultproperties
 	WeaponProjectiles(0)=class'Snowball.SBProj_SnowBall'
 	WeaponProjectiles(1)=class'Snowball.SBProj_SnowBall'
 
-	FireInterval(0)=+1.5
-	FireInterval(1)=+0.35
+	FireInterval(0)=SnowballCooldown
+	FireInterval(1)=SnowballCooldown
 
 	InstantHitDamageTypes(0)=None
 	InstantHitDamageTypes(1)=None
@@ -385,13 +393,10 @@ defaultproperties
 	ShouldFireOnRelease(0)=0
     ShouldFireOnRelease(1)=0
 
-	ShotCost(0)=1
-	ShotCost(1)=1
+	ShotCost(0)=SnowballAmmoCost
+	ShotCost(1)=SnowballAmmoCost
 
 	Spread(0)=0.0
-
-	SnowballStrength=1
-    MaxSnowballStrength=5
 
 	//FiringStatesArray(0)=WeaponLoadAmmo
 	FiringStatesArray(1)=WeaponLoadAmmo
@@ -470,9 +475,9 @@ defaultproperties
 	/** Inventory properties */
 	bCanThrow=false
 
-	AmmoCount=50
-	LockerAmmoCount=50
-	MaxAmmoCount=100
+	AmmoCount=StandardAmmo
+	LockerAmmoCount=LockerAmmo
+	MaxAmmoCount=MaxAmmo
 
 	InventoryGroup=4
 	GroupWeight=0.5
