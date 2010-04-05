@@ -7,14 +7,19 @@ class SBGame_KotC extends UTDeathmatch
 
 var SBPlayerController_ThirdPerson currentPlayer;
 
+var config bool IsThirdPerson;
+
 function RestartPlayer(Controller aPlayer)
 {
 	super.RestartPlayer(aPlayer);
-	`Log("Player restarted");
+	//`Log("Player restarted");
 	currentPlayer = SBPlayerController_ThirdPerson(aPlayer);
 	currentPlayer.resetMesh();
-	SBPlayerController_ThirdPerson(aPlayer).rSetBehindView(true);
-	SBPlayerController_ThirdPerson(aPlayer).rSetCameraMode('ThirdPerson');
+	if(IsThirdPerson)
+	{
+		SBPlayerController_ThirdPerson(aPlayer).rSetBehindView(true);
+		SBPlayerController_ThirdPerson(aPlayer).rSetCameraMode('ThirdPerson');
+	}
 }
 
 simulated function PostBeginPlay() 
@@ -26,7 +31,6 @@ simulated function PostBeginPlay()
 	{
 		Game.PlayerControllerClass=Class'SnowBall.SBPlayerController_ThirdPerson';
 	}
-
 }
 
 DefaultProperties

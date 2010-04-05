@@ -20,7 +20,6 @@ var config float DefaultGroundSpeed;
 var config float SlowerSpeedPercent;
 var config float SlideSpeedPercent;
 
-
 /*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
  * time the snow is picked up can be changed easily*/
 simulated function SnowGatheringTimer()

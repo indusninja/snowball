@@ -6,8 +6,11 @@ function DrawGameHud()
 {
     if ( !PlayerOwner.IsDead() && !UTPlayerOwner.IsInState('Spectating') )
     {
-        DrawBar("Health", PlayerOwner.Pawn.Health, PlayerOwner.Pawn.HealthMax, 20, 20, 200, 80, 80);
-        DrawBar("Ammo", UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, 20, 40, 80, 80, 200);
+		if(PlayerOwner.Pawn != none && PawnOwner != none)
+		{
+			DrawBar("Health", PlayerOwner.Pawn.Health, PlayerOwner.Pawn.HealthMax, 20, 20, 200, 80, 80);
+			DrawBar("Ammo", UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, 20, 40, 80, 80, 200);
+		}
     }
 }
 
