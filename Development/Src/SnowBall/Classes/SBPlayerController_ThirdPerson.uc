@@ -8,44 +8,8 @@ var AnimTree defaultAnimTree;
 var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
-var config int AmmoRate;
+
 var config int WallConstructionCost;
-var config float SlowCharacterSpeed;
-var config float MediumCharacterSpeed;
-var config float FastCharacterSpeed;
-
-/*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
- * time the snow is picked up can be changed easily*/
-simulated function AmmoPickingTimer()
-{
-	local string material;
-	
-	if(Pawn!=None)
-	{
-		material=string(SBBot_Custom(Pawn).GetAmmoMaterial());
-		//`log("Material: "$material);
-		if(material == "Snow")
-		{
-			Pawn.GroundSpeed = SlowCharacterSpeed;
-
-			// Only pick up snow if not firing a weapon and crouched
-			if( !(Pawn.IsFiring()) && Pawn.bIsCrouched)
-			{
-				// Also restrict to when not moving
-				if( (Pawn.Velocity.X == 0.0) &&
-					(Pawn.Velocity.Y == 0.0) &&
-					(Pawn.Velocity.Z == 0.0) )
-				{
-					Pawn.Weapon.AddAmmo(AmmoRate);
-				}
-			}
-		}
-		else
-		{	
-			Pawn.GroundSpeed = MediumCharacterSpeed;
-		}
-	}
-}
 
 /*Function responsible of placing a Wall when the key X is pressed*/
 exec function ConstructWall()
@@ -76,7 +40,6 @@ exec function ConstructWall()
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();
-	SetTimer(1,true,'AmmoPickingTimer');
 	//SetCameraMode('ThirdPerson');
 	//resetMesh();
 }

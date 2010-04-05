@@ -1,4 +1,5 @@
-class SBBot_Custom extends UTPawn;
+class SBBot_Custom extends UTPawn
+	config(SnowBall);
 
 // members for the custom mesh
 var SkeletalMesh defaultMesh;
@@ -8,7 +9,50 @@ var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
-simulated function name GetAmmoMaterial()
+var name MaterialBelowFeet;
+
+var config name GatheringMaterial;
+var config name SlowerSpeedMaterial;
+var config name SlideSpeedMaterial;
+
+var config float SnowGatherRate;
+var config float DefaultGroundSpeed;
+var config float SlowerSpeedPercent;
+var config float SlideSpeedPercent;
+
+
+/*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
+ * time the snow is picked up can be changed easily*/
+simulated function SnowGatheringTimer()
+{
+	if(MaterialBelowFeet == GatheringMaterial)
+	{
+
+		// Only pick up snow if not firing a weapon and crouched
+		if( !IsFiring() && bIsCrouched)
+		{
+			// Also restrict to when not moving
+			if( (Velocity.X == 0.0) && (Velocity.Y == 0.0) && (Velocity.Z == 0.0) )
+			{
+				UTInventoryManager(InvManager).AddAmmoToWeapon(1,class'SnowBall.SBWeap_SnowBallThrow');
+			}
+		}
+	}
+}
+
+simulated function Tick(float DeltaTime)
+{
+	Super.Tick(DeltaTime);
+
+	MaterialBelowFeet = GetMaterialBelowFeet();
+
+	if (MaterialBelowFeet == SlowerSpeedMaterial)
+		GroundSpeed = DefaultGroundSpeed * SlowerSpeedPercent;
+	else
+		GroundSpeed = DefaultGroundSpeed;
+}
+
+simulated function name GetMaterialBelowFeet()
 {
 	local vector HitLocation, HitNormal;
 	local TraceHitInfo HitInfo;
@@ -45,7 +89,7 @@ simulated function name GetAmmoMaterial()
 			return PhysicalProperty.MaterialType;
 		}
 	}
-	return 'None';
+	return '';
 }
 
 simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
@@ -60,6 +104,7 @@ simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
+	SetTimer(SnowGatherRate,true,'SnowGatheringTimer');
 	//SpawnDefaultController();
 }
 

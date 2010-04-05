@@ -2,7 +2,7 @@
  * King of the Castle game-mode
  */
 
-class SBGame_KotC extends UTGame
+class SBGame_KotC extends UTDeathmatch
 	config(SnowBall);
 
 var SBPlayerController_ThirdPerson currentPlayer;
