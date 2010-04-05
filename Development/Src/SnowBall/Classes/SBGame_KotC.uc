@@ -36,4 +36,6 @@ DefaultProperties
 	//bAutoNumBots=false
 	//MaxPlayersAllowed=4
 	DefaultInventory(0)=class'SnowBall.SBWeap_SnowBallThrow'
+
+	HUDType=class'SnowBall.SBHUD'
 }
