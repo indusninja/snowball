@@ -50,16 +50,16 @@ simulated function PostBeginPlay()
 /** Spawn and fire a projectile */
 simulated function Projectile ProjectileFire()
 {
-    local Projectile SpawnedProjectile;
-    SpawnedProjectile = super.ProjectileFire();
+	local Projectile SpawnedProjectile;
+	SpawnedProjectile = Super.ProjectileFire();
 
-    if ( SBProj_SnowBall(SpawnedProjectile) != None )
-    {
+	if ( SBProj_SnowBall(SpawnedProjectile) != None )
+	{
 		`log("Snowball: Fired snowball with strength of "@SnowBallStrength);
-        SBProj_SnowBall(SpawnedProjectile).InitSnow(self, SnowballStrength);
-    }
+		SBProj_SnowBall(SpawnedProjectile).InitSnow(self, SnowballStrength);
+	}
 
-    return SpawnedProjectile;
+	return SpawnedProjectile;
 }
 
 /**********************************************************************
@@ -239,7 +239,7 @@ defaultproperties
 	InstantHitDamageTypes(1)=None
 
 	ShouldFireOnRelease(0)=0
-    ShouldFireOnRelease(1)=0
+	ShouldFireOnRelease(1)=0
 
 	FireInterval(0)=+0.5
 	FireInterval(1)=+0.5
@@ -254,12 +254,12 @@ defaultproperties
 
 	EquipTime=+0.45
 	PutDownTime=+0.33
-	WeaponRange=22000
+	WeaponRange=0
 
 	AmmoCount=50
 	MaxAmmoCount=100
 
-	//FireOffset=(X=0.0,Y=0.0,Z=0.0)
+	FireOffset=(X=20,Y=5)
 	//PlayerViewOffset=(X=17,Y=10.0,Z=-8.0)
 
 	/** 3D-models and animations */
@@ -279,14 +279,14 @@ defaultproperties
 	ArmsAnimSet=AnimSet'WP_ShockRifle.Anim.K_WP_ShockRifle_1P_Base'
 
 	WeaponFireAnim(0)=WeaponFire
-    WeaponFireAnim(1)=WeaponAltFire
+	WeaponFireAnim(1)=WeaponAltFire
 	ArmFireAnim(0)=WeaponFire
-    ArmFireAnim(1)=WeaponAltFire
+	ArmFireAnim(1)=WeaponAltFire
 
-    WeaponEquipAnim=WeaponEquip
+	WeaponEquipAnim=WeaponEquip
 	ArmsEquipAnim=WeaponEquip
 
-    WeaponPutDownAnim=WeaponPutDown
+	WeaponPutDownAnim=WeaponPutDown
 	ArmsPutDownAnim=WeaponPutDown
 
 	WeaponChargeAnim=WeaponAltCharge

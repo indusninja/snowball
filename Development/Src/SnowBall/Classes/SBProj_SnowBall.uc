@@ -10,7 +10,7 @@ var config float	SpeedIncrement;
 var config float  	SpeedBase;
 var config float	DamageIncrement;
 var config float    DamageBase;
-var config float    GravityForce;
+var config float    TossForce;
 var config float    ImpactForce;
 
 replication
@@ -27,7 +27,7 @@ simulated function PostBeginPlay()
 	// Set config values
 	Speed = SpeedBase;
 	Damage = DamageBase;
-	TossZ = GravityForce;
+	TossZ = TossForce;
 	MomentumTransfer = ImpactForce;
 }
 
