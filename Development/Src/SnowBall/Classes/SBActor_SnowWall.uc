@@ -38,7 +38,7 @@ defaultproperties
 	bReplicateMovement=true // if true, replicate movement/location related properties
 
     Begin Object Name=FracturedStaticMeshComponent0 
-        StaticMesh=FracturedStaticMesh'PAK_SnowBall_v1.StaticMesh.SB_SnowWall_Fractured'
+        StaticMesh=FracturedStaticMesh'SB_BaseGameType.Mesh.SB_SnowWall_Fractured'
     End Object
 
 	Components.Add(FracturedStaticMeshComponent0)

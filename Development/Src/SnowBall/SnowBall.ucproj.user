@@ -10,7 +10,7 @@
     <CmdArgs>
     </CmdArgs>
     <LoadMapAtStartup>True</LoadMapAtStartup>
-    <StartupMap>SB_Hill_Playground</StartupMap>
+    <StartupMap>SB_Playground_Hill_v3</StartupMap>
     <LoadGameType>True</LoadGameType>
     <UserGameType>SnowBall.SBGame_KotC</UserGameType>
     <NoSound>False</NoSound>

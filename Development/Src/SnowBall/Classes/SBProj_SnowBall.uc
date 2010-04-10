@@ -55,8 +55,8 @@ function InitSnow(SBWeap_SnowBallThrow FiringWeapon, int InSnowballStrength)
     Velocity = Normal(Velocity) * NewSpeed;
     Damage = Damage + InSnowballStrength * Damage * DamageIncrement;
 
-	`log("Snowball: Speed is "@NewSpeed);
-	`log("Snowball: Damage is "@Damage);
+	//`log("Snowball: Speed is "@NewSpeed);
+	//`log("Snowball: Damage is "@Damage);
 
     SetSnowballStrength(InSnowballStrength);
 }
