@@ -66,6 +66,9 @@
     <Compile Include="Classes\SBHUD.uc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\SBKoTCObjective.uc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Classes\SBProj_SnowBall.uc">
       <SubType>Code</SubType>
     </Compile>
