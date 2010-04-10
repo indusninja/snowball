@@ -19,17 +19,19 @@ replication
         SnowballStrength;
 }
 
+/** What to do once the snowball is created */
 simulated function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
 	// Set config values
-	//Speed = SpeedBase;
+	Speed = SpeedBase;
 	Damage = DamageBase;
 	TossZ = GravityForce;
 	MomentumTransfer = ImpactForce;
 }
 
+/** Replicate variables */
 simulated event ReplicatedEvent(name VarName)
 {
     if (VarName == 'SnowballStrength')
@@ -42,15 +44,21 @@ simulated event ReplicatedEvent(name VarName)
     }
 }
 
+/** Initialise the snowball based on how much it was charged */
 function InitSnow(SBWeap_SnowBallThrow FiringWeapon, int InSnowballStrength)
 {
-    // adjust speed
-    InSnowballStrength = Max(InSnowballStrength, 1);
-    Velocity = Normal(Velocity) * (Speed + (InSnowballStrength-1) * Speed * SpeedIncrement);
-    Damage = Damage + Damage * DamageIncrement * (InSnowballStrength-1);
+	local float NewSpeed;
+
+	// adjust snowball parameters
+    InSnowballStrength = Max(InSnowballStrength, 0);
+	NewSpeed = Speed + InSnowballStrength * SpeedBase * SpeedIncrement;
+    Velocity = Normal(Velocity) * NewSpeed;
+    Damage = Damage + InSnowballStrength * Damage * DamageIncrement;
+
+	`log("Snowball: Speed is "@NewSpeed);
+	`log("Snowball: Damage is "@Damage);
 
     SetSnowballStrength(InSnowballStrength);
-    //RestTime = Default.RestTime + 0.6*InSnowballStrength;
 }
 
 /** CreateProjectileLight() called from TickSpecial() once if Instigator is local player
@@ -62,37 +70,20 @@ simulated event CreateProjectileLight()
 	AttachComponent(ProjectileLight);
 }
 
-/**
- * Sets the strength of this bio goo actor
- */
+/** Sets the strength of this snowball actor */
 simulated function SetSnowballStrength( int NewStrength )
 {
-    SnowballStrength = Max(NewStrength,1);
-    SetDrawScale(Sqrt((SnowballStrength == 1) ? 1 : (SnowballStrength + 1)) * default.DrawScale);
-    if (SnowballStrength > 4)
-    {
-        SetCollisionSize(CylinderComponent.CollisionRadius, CylinderComponent.CollisionHeight * 2.0);
-    }
-
-    // set different damagetype for charged shots
-    /**if (SnowballStrength > 1)
-    {
-        MyDamageType = default.MyDamageType;
-    }
-    else
-    {*/
-        //MyDamageType = class'SBProj_Snowball'.default.MyDamageType;
-		//MyDamageType = default.MyDamageType;
-    //}
+    SnowballStrength = Max(NewStrength,0);
 }
 
+/** What do when hitting another object */
 simulated function ProcessTouch(Actor Other, vector HitLocation, vector HitNormal)
 {
 	local SBProj_SnowBall SnowProj;
 
 	Super.ProcessTouch(Other, HitLocation, HitNormal);
 
-	// when shock projectiles collide, make sure they both blow up
+	// when snowballs collide, make sure they both blow up
 	SnowProj = SBProj_SnowBall(Other);
 	if (SnowProj != None)
 	{
@@ -107,11 +98,13 @@ defaultproperties
 	Speed=1000
 	MaxSpeed=7000
 	MaxEffectDistance=7000.0
+	bRotationFollowsVelocity=false
 	bCheckProjectileLight=true
 	ProjectileLightClass=class'UTGame.UTShockBallLight'
 	TossZ=+245.0
 	Physics=PHYS_Falling
 
+	SnowballStrength=0
 	Damage=30
 	DamageRadius=0
 	MomentumTransfer=10000

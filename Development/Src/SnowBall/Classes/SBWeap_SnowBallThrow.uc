@@ -55,6 +55,7 @@ simulated function Projectile ProjectileFire()
 
     if ( SBProj_SnowBall(SpawnedProjectile) != None )
     {
+		`log("Snowball: Fired snowball with strength of "@SnowBallStrength);
         SBProj_SnowBall(SpawnedProjectile).InitSnow(self, SnowballStrength);
     }
 
@@ -94,7 +95,7 @@ simulated state WeaponLoadAmmo
 
 		Cleartimer('RefireCheckTimer');
 
-		SnowballStrength = 1;
+		SnowballStrength = 0;
 
 		POwner = UTPawn(Instigator);
 		if (POwner != None)
@@ -126,11 +127,10 @@ simulated state WeaponLoadAmmo
 	/** Increase the power of the snowball by one */
 	simulated function IncreaseSnowballStrength()
 	{
-		if (!IsFullyCharged() && HasAmmo(CurrentFireMode))
+		if (!IsFullyCharged())
 		{
 			// Add the snow
 			SnowballStrength++;
-			ConsumeAmmo(CurrentFireMode);
 		}
 	}
 
@@ -143,10 +143,13 @@ simulated state WeaponLoadAmmo
 	/** Fire the shot */
 	simulated function WeaponFireLoad()
 	{
-		ProjectileFire();
-		PlayFiringSound();
+		if (HasAmmo(CurrentFireMode)) {
+			ConsumeAmmo(CurrentFireMode);
+			ProjectileFire();
+			PlayFiringSound();
 
-		InvManager.OwnerEvent('FiredWeapon');
+			InvManager.OwnerEvent('FiredWeapon');
+		}
 	}
 
 	/** Override RefireCheckTimer to increase snowball power each interval */
@@ -161,7 +164,7 @@ simulated state WeaponLoadAmmo
     	return;
 	}
 
-	/** Weapon has run out of ammo */
+	/** Override this so weapon doesnt switch when ammo runs out while charging */
 	simulated function WeaponEmpty();
 
 	/** Put down weapon */
@@ -184,7 +187,6 @@ simulated state WeaponLoadAmmo
 	}
 
 Begin:
-    IncreaseSnowballStrength();
     TimeWeaponFiring(CurrentFireMode);
 }
 
@@ -248,7 +250,7 @@ defaultproperties
 	FiringStatesArray(0)=WeaponLoadAmmo
 	FiringStatesArray(1)=None
 
-	CoolDownTime=0.33
+	CoolDownTime=1.00
 
 	EquipTime=+0.45
 	PutDownTime=+0.33
