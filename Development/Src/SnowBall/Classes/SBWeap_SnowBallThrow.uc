@@ -294,16 +294,20 @@ defaultproperties
 
 	/** Visual Effects */
 	MuzzleFlashSocket=MF
-	MuzzleFlashPSCTemplate=WP_ShockRifle.Particles.P_ShockRifle_MF_Alt
+	/*MuzzleFlashPSCTemplate=WP_ShockRifle.Particles.P_ShockRifle_MF_Alt
 	MuzzleFlashAltPSCTemplate=WP_ShockRifle.Particles.P_ShockRifle_MF_Alt
-	MuzzleFlashColor=(R=200,G=120,B=255,A=255)
+	MuzzleFlashColor=(R=200,G=120,B=255,A=255)*/
+	MuzzleFlashPSCTemplate=SB_SpecialEffects.Effects.Snowball_Hit_Psystem
+	MuzzleFlashAltPSCTemplate=SB_SpecialEffects.Effects.Snowball_Hit_Psystem
+	MuzzleFlashColor=(R=255,G=255,B=255,A=255)
 	MuzzleFlashDuration=0.33
 	MuzzleFlashLightClass=class'UTGame.UTShockMuzzleFlashLight'
 
 	AttachmentClass=class'UTGameContent.UTAttachment_ShockRifle'
 
 	Begin Object Class=ParticleSystemComponent Name=ChargePart
-		Template=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
+		//Template=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
+		Template=ParticleSystem'SB_SpecialEffects.Effects.Snowball_Hit_Psystem'
 		bAutoActivate=false
 		DepthPriorityGroup=SDPG_Foreground
 	End Object

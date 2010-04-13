@@ -12,6 +12,7 @@ var config float	DamageIncrement;
 var config float    DamageBase;
 var config float    TossForce;
 var config float    ImpactForce;
+var MeshComponent   SnowBallMesh;
 
 replication
 {
@@ -93,8 +94,10 @@ simulated function ProcessTouch(Actor Other, vector HitLocation, vector HitNorma
 
 defaultproperties
 {
-	ProjFlightTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
-	ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
+	//ProjFlightTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball'
+	//ProjExplosionTemplate=ParticleSystem'WP_ShockRifle.Particles.P_WP_ShockRifle_Ball_Impact'
+	ProjFlightTemplate=ParticleSystem'SB_SpecialEffects.Effects.Snowball_Hit_Psystem'
+	ProjExplosionTemplate=ParticleSystem'SB_SpecialEffects.Effects.Snowball_Hit_Psystem'
 	Speed=1000
 	MaxSpeed=7000
 	MaxEffectDistance=7000.0
@@ -128,6 +131,22 @@ defaultproperties
 		BlockActors=true
 		CollideActors=true
 	End Object
+
+	Begin Object Class=StaticMeshComponent name=ProjectileMesh
+		StaticMesh=StaticMesh'SB_Snowball.Mesh.Snowball04'
+		CullDistance=20000
+		Scale=2.0
+		CollideActors=false
+		CastShadow=false
+		bAcceptsLights=true
+		bForceDirectLightMap=true
+		LightingChannels=(BSP=true,Dynamic=false,Static=true,CompositeDynamic=false)
+		BlockRigidBody=false
+		BlockActors=false
+		bUseAsOccluder=false
+	End Object
+	Components.Add(ProjectileMesh)
+	SnowBallMesh=ProjectileMesh
 
 	bNetTemporary=false
 	AmbientSound=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireTravelCue'
