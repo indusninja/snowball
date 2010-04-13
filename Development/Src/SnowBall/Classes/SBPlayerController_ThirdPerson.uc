@@ -14,29 +14,12 @@ var config int WallConstructionCost;
 /*Function responsible of placing a Wall when the key X is pressed*/
 exec function ConstructWall()
 {
-	local vector loc;
-	local Rotator rot;
-
-	if(Pawn.Weapon.HasAmmo(0,WallConstructionCost))
-	{
-		loc = Pawn.Location + normal(vector(Pawn.Rotation))*200; 
-		//loc.Y-=90;
-		//loc.X-=90;
-		//loc.X = Pawn.Location + normal(vector(Pawn.Rotation)).X*200; 
-		//loc.Y=Pawn.Location.Y - normal(vector(Pawn.Rotation)).Y*200;
-		
-		//Rotation based on Tait-Bryan angles... nice...
-		rot.Pitch=Pawn.Rotation.Pitch ;
-		rot.Roll=Pawn.Rotation.Roll;
-		rot.Yaw=Pawn.Rotation.Yaw + (90.0f * DegToRad) * RadToUnrRot;
-		
-		//loc.Z-=15;
-		loc.Z=Pawn.Location.Z-35;//Placing Wall in the ground
-		
-		Pawn.Spawn(class'SnowBall.SBActor_SnowWall',,,loc,rot);
-		Pawn.Weapon.AddAmmo(-1*WallConstructionCost);
-	}
+	// if we are a remote client, make sure the Server Set's toggles the flashlight
+    `log("Role:" @ Role);
+	SBBot_Custom(self.pawn).ServerCreateWall();
 }
+
+
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();

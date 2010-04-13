@@ -20,6 +20,69 @@ var config float DefaultGroundSpeed;
 var config float SlowerSpeedPercent;
 var config float SlideSpeedPercent;
 
+var repnotify Vector Destination;
+var repnotify Rotator WallRotation;
+
+
+var config int WallConstructionCost;
+
+
+replication
+{
+	//If I'm the server I replicate the location and rotation to the clients
+	if (Role==ROLE_Authority && bNetDirty) Destination,WallRotation;
+
+}
+
+/*This event is triggered everytime the variables labeled with reptonify are modified. Then we call the 
+ *simulated function SpawnWall on all the clients that recieved the replicated version of WallRotation*/
+
+simulated event ReplicatedEvent(name VarName)
+{
+	super.ReplicatedEvent(VarName);
+
+	if (VarName=='WallRotation'){
+		ClientMessage("Spawning client wall");
+		SpawnWall();
+	}
+}
+
+unreliable server function  ServerCreateWall()
+{	
+	local vector loc;
+	local Rotator rot;
+
+	if(Weapon.HasAmmo(0,WallConstructionCost))
+	{
+		loc = Location + normal(vector(Rotation))* 200; //Placing the Wall further
+		
+		//Rotation based on Tait-Bryan angles... nice...
+		rot.Pitch=Rotation.Pitch ;
+		rot.Roll=Rotation.Roll;
+		rot.Yaw=Rotation.Yaw + (-90.0f * DegToRad) * RadToUnrRot;
+		
+		loc.Z=Location.Z-35;//Placing Wall in the ground
+
+		//Updating replicated variables data
+		WallRotation=rot;
+		Destination=loc;
+
+		//Calling the simulated function that it's goin to spawn both in client and server the wall
+		SpawnWall();
+
+		Weapon.AddAmmo(-1*WallConstructionCost);
+	}
+}
+
+/*Function simulated on the server so it knows where to Spawn the wall*/
+simulated function SpawnWall()
+{
+	if((Destination.X!=0 || Destination.Y!=0 || Destination.Z!=0)&&
+		(WallRotation!=Rotation))
+		WorldInfo.Spawn(class'SnowBall.SBActor_SnowWall',Owner,,Destination,WallRotation);
+}
+
+
 /*Function for picking up snow. It has a timer associated declared in the PostBeginPlay function, so the 
  * time the snow is picked up can be changed easily*/
 simulated function SnowGatheringTimer()
