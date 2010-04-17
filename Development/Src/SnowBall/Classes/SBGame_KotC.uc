@@ -4,6 +4,7 @@ class SBGame_KotC extends UTTeamGame
 
 /** List of objectives in level */
 var array<SBKotCObjective> KotCObjectives;
+var SBKotCObjective_Castle KotCCastle;
 
 var SBPlayerController_ThirdPerson currentPlayer;
 
@@ -47,7 +48,114 @@ event InitGame(string Options, out string ErrorMessage)
 /** Find the different objectives and set them up */
 function InitObjectives()
 {
-	// Go through the objective list, find out what type each objective is and init accordingly
+	local int i;
+
+	// Find the castle
+	for (i = 0; i < KotCObjectives.length; i++)
+	{
+		if (SBKotCObjective_Castle(KotCObjectives[i]) != None)
+		{
+			if (KotCCastle == None)
+				KotCCastle = SBKotCObjective_Castle(KotCObjectives[i]);
+			else
+				`Log("KotC: Multiple castles found!!",,'error');
+		}
+	}
+}
+
+/** Set what to focus on at the end of the game */
+function SetEndGameFocus(PlayerReplicationInfo Winner)
+{
+	local Controller P;
+
+	EndGameFocus = KotCCastle;
+
+	if ( EndGameFocus != None )
+		EndGameFocus.bAlwaysRelevant = true;
+
+	foreach WorldInfo.AllControllers(class'Controller', P)
+	{
+		P.GameHasEnded(EndGameFocus, (P.PlayerReplicationInfo != None) && (P.PlayerReplicationInfo.Team == GameReplicationInfo.Winner) );
+	}
+}
+
+/** Check whether the score is sufficient to end the game */
+function bool CheckScore(PlayerReplicationInfo Scorer)
+{
+	if (CheckMaxLives(Scorer) ) 
+	{
+		return false;
+	}
+	else if (GoalScore != 0 && (Teams[0].Score >= GoalScore || Teams[1].Score >= GoalScore))
+	{
+		EndGame(Scorer,"teamscorelimit");
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/** Called by the castle objective once a team has succesfully captured and held it*/
+function CastleHeld(byte TeamIndex)
+{
+	if (TeamIndex == 0)
+	{
+		BroadcastLocalizedMessage( MessageClass, 0);
+		Teams[0].Score += 1;
+		Teams[0].bForceNetUpdate = TRUE;
+		CheckScore(KotCCastle.LastDefender);
+	}
+	else
+	{
+		BroadcastLocalizedMessage( MessageClass, 1);
+		Teams[1].Score += 1;
+		Teams[1].bForceNetUpdate = TRUE;
+		CheckScore(KotCCastle.LastDefender);
+	}
+	BroadcastLocalizedMessage( MessageClass, bOverTime ? 12 : 11);
+
+	if (!bGameEnded)
+	{
+		EndRound(KotCCastle);
+	}
+}
+
+/** State for when the match is over */
+state MatchOver
+{
+	/** Dummy function if a castle capture happens after match is over */
+	function CastleHeld(byte TeamIndex) {}
+}
+
+/** Reset the game for a new round */
+function Reset()
+{
+	local int i;
+	local UTPlayerReplicationInfo PRI;
+
+	for (i = 0; i < KotCObjectives.length; i++)
+	{
+		KotCObjectives[i].Reset();
+	}
+
+	Super.Reset();
+	
+	// reset per-life PRI properties
+	for (i = 0; i < GameReplicationInfo.PRIArray.length; i++)
+	{
+		PRI = UTPlayerReplicationInfo(GameReplicationInfo.PRIArray[i]);
+		if (PRI != None)
+		{
+			PRI.Spree = 0;
+		}
+	}
+
+	for (i = 0; i < ArrayCount(Teams); i++)
+	{
+		Teams[i].AI.SetObjectiveLists();
+	}
 }
 
 /** Restart the player */
