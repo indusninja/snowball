@@ -63,23 +63,43 @@ simulated function Tick(float DeltaTime)
 		// Is Attacking team present?
 		if ( TeamPresent[1 - DefendingTeam] )
 		{
-			// Is the capture in progress already?
-			if ( bIsBeingCaptured )
+			if ( !TeamPresent[DefendingTeam] )
 			{
-				// Capture Progress
-				CaptureProgress += DeltaTime;
-
-				if (CaptureProgress >= CaptureTime)
+				// Is the capture in progress already?
+				if ( bIsBeingCaptured )
 				{
-					// Capture completed
-					SetDefender(1 - DefendingTeam);
-				}				
+					// Capture Progress
+					CaptureProgress += DeltaTime;
+
+					if (CaptureProgress >= CaptureTime)
+					{
+						// Capture completed
+						`Log("SB Objective: Objective captured!");
+						SetDefender(1 - DefendingTeam);
+					}				
+				}
+				else
+				{
+					// Starting capture
+					`Log("SB Objective: Capturing...");
+					bIsBeingCaptured = true;
+					CaptureProgress = 0;
+				}
 			}
 			else
 			{
-				// Starting capture
-				bIsBeingCaptured = true;
-				CaptureProgress = 0;
+				if ( bIsBeingCaptured )
+				{
+					// Capture aborted. Enemy blocking it
+					`Log("SB Objective: Defender present. Capture aborted!");
+					bIsBeingCaptured = false;
+					CaptureProgress = 0;
+				}
+				else
+				{
+					// Capture blocked. Enemy present
+					`Log("SB Objective: Defender blocking capture attempt!");
+				}
 			}
 		}
 		else
@@ -87,6 +107,7 @@ simulated function Tick(float DeltaTime)
 			if ( bIsBeingCaptured )
 			{
 				// Capture aborted, no attackers present
+				`Log("SB Objective: Attacker left. Capture aborted!");
 				bIsBeingCaptured = false;
 				CaptureProgress = 0;
 			}
