@@ -9,14 +9,17 @@ var bool bIsNeutral;
 /** Is this objective in the process of being captured */
 var bool bIsBeingCaptured;
 
-/** owning team's index */
-var int DefendingTeam;
+/** Is control tied at the moment */
+var bool bIsTied;
 
 /** The time increments at which capture progress is measure */
 var float AreaCheckFrequency;
 
-/** Is there a member of a specific team present */
-var Array<bool> TeamPresent;
+/** Which team is controlling */
+var byte CurrentTeam;
+
+/** Team in the process of capturing */
+var byte CaptureTeamIndex;
 
 /** The amount of time that capture has been in progress */
 var float CaptureProgress;
@@ -41,127 +44,75 @@ simulated event PostBeginPlay()
 }
 
 /** Set initial state of this objective */
-function SetInitialSate()
+simulated function SetInitialSate()
 {
-	bIsBeingCaptured = False;
-	bIsNeutral = True;
-	TeamPresent[0] = false;
-	TeamPresent[1] = false;
+	bIsBeingCaptured = false;
+	bIsNeutral = true;
+	bIsTied = true;
 
 	LastDefender = none;
 }
 
 /** Update nearby actors associated with this objective */
-function UpdateCloseActors() {}
+simulated function UpdateCloseActors() {}
 
 /** Check states */
 simulated function Tick(float DeltaTime)
 {
 	Super.Tick(DeltaTime);	
 
+	UpdateCaptureStatus(DeltaTime);
+}
+
+simulated function UpdateCaptureStatus(float DeltaTime)
+{
 	if ( !bIsNeutral )
 	{
-		// Is Attacking team present?
-		if ( TeamPresent[1 - DefendingTeam] )
+		// What is the current status?
+		if ( !bIsTied )
 		{
-			if ( !TeamPresent[DefendingTeam] )
+			// Red or Blue Team
+			if (bIsBeingCaptured)
 			{
-				// Is the capture in progress already?
-				if ( bIsBeingCaptured )
+				if ( CurrentTeam == CaptureTeamIndex )
 				{
 					// Capture Progress
+					`Log("SB Objective: Capture progress: "@CaptureProgress);
 					CaptureProgress += DeltaTime;
 
 					if (CaptureProgress >= CaptureTime)
 					{
 						// Capture completed
 						`Log("SB Objective: Objective captured!");
-						SetDefender(1 - DefendingTeam);
-					}				
-				}
-				else
-				{
-					// Starting capture
-					`Log("SB Objective: Capturing...");
-					bIsBeingCaptured = true;
-					CaptureProgress = 0;
-				}
-			}
-			else
-			{
-				if ( bIsBeingCaptured )
-				{
-					// Capture aborted. Enemy blocking it
-					`Log("SB Objective: Defender present. Capture aborted!");
-					bIsBeingCaptured = false;
-					CaptureProgress = 0;
-				}
-				else
-				{
-					// Capture blocked. Enemy present
-					`Log("SB Objective: Defender blocking capture attempt!");
-				}
-			}
-		}
-		else
-		{
-			if ( bIsBeingCaptured )
-			{
-				// Capture aborted, no attackers present
-				`Log("SB Objective: Attacker left. Capture aborted!");
-				bIsBeingCaptured = false;
-				CaptureProgress = 0;
-			}
-		}
-	}
-	else
-	{
-		if ( bIsBeingCaptured )
-		{
-			// Is Attacking team still present?
-			if ( TeamPresent[1 - DefendingTeam] )
-			{
-				// Is the other team there now?
-				if ( TeamPresent[DefendingTeam] )
-				{
-					// Capture aborted. enemy interfered
-					bIsBeingCaptured = false;
-					CaptureProgress = 0;
-				}
-				else
-				{
-					// Capture Progress
-					CaptureProgress += DeltaTime;
-
-					if (CaptureProgress >= CaptureTime)
-					{
-						// Capture completed
-						SetDefender(1 - DefendingTeam);
+						SetTeam(CaptureTeamIndex);
 					}		
 				}
+				else
+				{
+					`Log("SB Objective: Capture interrupted by enemy!");
+					bIsBeingCaptured = false;
+					CaptureProgress = 0;
+				}
 			}
 			else
 			{
-				// Captured aborted, attacker not present
-				bIsBeingCaptured = false;
-				CaptureProgress = 0;
+				// Is the controlling team not the owner?
+				if (bIsNeutral || (CurrentTeam != DefenderTeamIndex) )
+				{
+					`Log("SB Objective: Capture started by team "@CurrentTeam);
+					bIsBeingCaptured = true;
+					CaptureProgress = 0;
+					CaptureTeamIndex = CurrentTeam;
+				}
 			}
 		}
 		else
 		{
-			// Only allow capture if a team is the only one present
-			if ( TeamPresent[0] && !TeamPresent[1] )
+			// Control tied
+			if (bIsBeingCaptured)
 			{
-				// Starting capture for team 0
-				DefendingTeam = 1;
-				bIsBeingCaptured = true;
-				CaptureProgress = 0;
-			}
-			else if ( !TeamPresent[0] && TeamPresent[1] )
-			{
-				// Starting capture for team 1
-				DefendingTeam = 0;
-				bIsBeingCaptured = true;
+				`Log("SB Objective: Objective control tied. Capture aborted.");
+				bIsBeingCaptured = false;
 				CaptureProgress = 0;
 			}
 		}
@@ -169,13 +120,15 @@ simulated function Tick(float DeltaTime)
 }
 
 /** Check for players in the area and determine capture progress */
-function AreaCheckTimer()
+simulated function AreaCheckTimer()
 {
 	local SBBot_Custom Player;
 	local float Distance;
+	local bool TeamRed;
+	local bool TeamBlue;
 
-	TeamPresent[0] = false;
-	TeamPresent[1] = false;
+	TeamRed = false;
+	TeamBlue = false;
 
 	foreach AllActors(class'SBBot_Custom', Player)
 	{
@@ -183,21 +136,49 @@ function AreaCheckTimer()
 
 		if (Distance <= CaptureDistance)
 		{
-			TeamPresent[(Player.GetTeam()).TeamIndex] = true;
+			if ( (Player.GetTeam()).TeamIndex == 0 )
+			{
+				`log("SB Objective: Player from team red");
+				TeamRed = true;
+			}
+			else if ( (Player.GetTeam()).TeamIndex == 1 )
+			{
+				`log("SB Objective: Player from team blue");
+				TeamBlue = true;
+			}
 		}
+	}
+
+	if ( TeamRed && !TeamBlue )
+	{
+		//`log("SB Objective: Red Team Controlling");
+		CurrentTeam = 0;
+		bIsTied = false;
+	}
+	else if ( !TeamRed && TeamBlue )
+	{
+		//`log("SB Objective: Red Team Controlling");
+		CurrentTeam = 1;
+		bIsTied = false;
+	}
+	else
+	{
+		//`log("SB Objective: Control tied");
+		bIsTied = true;
 	}
 }
 
 /** Set the new defending team */
-function SetDefender(int TeamIndex)
+simulated function SetTeam(byte TeamIndex)
 {
 	bIsNeutral = false;
 	bIsBeingCaptured = false;
-	DefendingTeam = TeamIndex;
+
+	super.SetTeam(TeamIndex);
 }
 
 /** Reset the objective */
-function Reset()
+simulated function Reset()
 {
 	SetInitialState();
 
