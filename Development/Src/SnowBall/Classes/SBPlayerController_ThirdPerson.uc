@@ -14,11 +14,35 @@ var config int WallConstructionCost;
 /*Function responsible of placing a Wall when the key X is pressed*/
 exec function ConstructWall()
 {
-	// if we are a remote client, make sure the Server Set's toggles the flashlight
-    `log("Role:" @ Role);
-	SBBot_Custom(self.pawn).ServerCreateWall();
+	//bIsContructing=constructionActive;
+	SBBot_Custom(Pawn).StartConstructing();
+	//`log("Cagin tal");
+	PushState('CreateWall');
 }
 
+state CreateWall 
+{	
+
+	 function StopConstructingWall()
+	 {
+		SBBot_Custom(Pawn).StopConstructing();
+		PopState();
+	 }
+
+	 function CompletedConstruction()
+	 {
+		PopState();
+	 }
+
+	exec  function ConstructWall()
+	{
+		//`log("This is crap "@constr );
+		StopConstructingWall();
+		
+		//SBBot_Custom(self.pawn).ServerCreateWall(bIsContructing);
+		//bIsContructing=constructionActive;
+	}
+}
 
 simulated function PostBeginPlay() 
 {

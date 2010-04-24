@@ -23,63 +23,139 @@ var config float SlideSpeedPercent;
 var repnotify Vector Destination;
 var repnotify Rotator WallRotation;
 
+var repnotify SBActor_SnowWall Wall;
+var repnotify bool bIsContructing;
 
 var config int WallConstructionCost;
-
+var config int WallInitialDepth;
 
 replication
 {
 	//If I'm the server I replicate the location and rotation to the clients
-	if (Role==ROLE_Authority && bNetDirty) Destination,WallRotation;
+	if (Role==ROLE_Authority && bNetDirty) 
+		Destination,WallRotation,bIsContructing,Wall;
 
+	//if(Role<ROLE_Authority)
+	//	bIsContructing;
+
+}
+
+
+reliable server /*simulated*/ function StopConstructing()
+{
+	//if(bIsContructing)
+	bIsContructing=false;
+	
+	if(Wall!=none)
+		Wall=none;
+	
+	`log("bIscontructing: "@bIsContructing);
+
+}
+
+reliable server /*simulated*/ function StartConstructing()
+{
+	//if(!bIsContructing)
+		bIsContructing=true;
+	`log("bIscontructing: "@bIsContructing);
+	//ServerCreateWall();
 }
 
 /*This event is triggered everytime the variables labeled with reptonify are modified. Then we call the 
  *simulated function SpawnWall on all the clients that recieved the replicated version of WallRotation*/
-
 simulated event ReplicatedEvent(name VarName)
 {
 	super.ReplicatedEvent(VarName);
 
-	if (VarName=='WallRotation'){
+	if(VarName=='bIsContructing')
+	{
+		//StopConstructing();
+		//StartConstructing();
+		if(bIsContructing)
+		`log("Iscontructing replicated event "@bIsContructing);
+		else
+			Wall=none;
+		//if(!bIsContructing)
+		//Wall=none;
+	}
+
+	if (VarName=='Destination'||VarName=='Rotation'){
+		`log("Replicating Wall...");
 		ClientMessage("Spawning client wall");
-		SpawnWall();
+		if(bIsContructing)
+		/*Wall=*/SpawnWall(bIsContructing);
+		//Wall=GrowingWall();
 	}
 }
 
-unreliable server function  ServerCreateWall()
+reliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 {	
 	local vector loc;
 	local Rotator rot;
 
-	if(Weapon.HasAmmo(0,WallConstructionCost))
+	//bIsContructing=constructing;
+	`log("Construction: "@bIsContructing);
+	if(bIsContructing==true)
 	{
-		loc = Location + normal(vector(Rotation))* 200; //Placing the Wall further
-		
-		//Rotation based on Tait-Bryan angles... nice...
-		rot.Pitch=Rotation.Pitch ;
-		rot.Roll=Rotation.Roll;
-		rot.Yaw=Rotation.Yaw + (-90.0f * DegToRad) * RadToUnrRot;
-		
-		loc.Z=Location.Z-35;//Placing Wall in the ground
+		if(Wall==none)
+		{
+			if(Weapon.HasAmmo(0,WallConstructionCost))
+			{
+				loc = Location + normal(vector(Rotation))* 200; //Placing the Wall further
+				
+				//Rotation based on Tait-Bryan angles... nice...
+				rot.Pitch=Rotation.Pitch ;
+				rot.Roll=Rotation.Roll;
+				rot.Yaw=Rotation.Yaw + (-90.0f * DegToRad) * RadToUnrRot;
+				
+				loc.Z=Location.Z - WallInitialDepth;//Placing Wall in the ground
 
-		//Updating replicated variables data
-		WallRotation=rot;
-		Destination=loc;
+				//Updating replicated variables data
+				WallRotation=rot;
+				Destination=loc;
 
-		//Calling the simulated function that it's goin to spawn both in client and server the wall
-		SpawnWall();
+				//Calling the simulated function that it's goin to spawn both in client and server the wall
+				/*Wall=*/SpawnWall(constructing);
+				
+				Weapon.AddAmmo(-1*WallConstructionCost);
+			}
+		}else
+			{
+			//`log("Client grows the wall??");
 
-		Weapon.AddAmmo(-1*WallConstructionCost);
+				////Updating replicated variables data
+				WallRotation=Wall.Rotation;
+				Destination.Z= Wall.Location.Z + 6;
+
+				if(Destination.Z < self.Location.Z - 50)
+					Wall.Destroy();
+
+				//Wall=none;
+				///*Wall=*/GrowingWall();
+				SpawnWall(constructing);
+			}
 	}
+	//else
+	//	Wall=none;
 }
 
 /*Function simulated on the server so it knows where to Spawn the wall*/
-simulated function SpawnWall()
+simulated function /*SBActor_SnowWall*/ SpawnWall(bool construct)
 {
-	if((Destination.X!=0 || Destination.Y!=0 || Destination.Z!=0)&&
-		(WallRotation!=Rotation))
-		WorldInfo.Spawn(class'SnowBall.SBActor_SnowWall',Owner,,Destination,WallRotation);
+	if((Destination.Z < self.Location.Z - 50) && bIsContructing)
+	{
+		Wall.Destroy();
+		if((Destination.X!=0 || Destination.Y!=0 || Destination.Z!=0)&&
+			(WallRotation!=Rotation))
+				Wall=WorldInfo.Spawn(class'SnowBall.SBActor_SnowWall',Owner,,Destination,WallRotation);
+	}
+	else
+	{
+		Wall=none;
+		//`log("Deleting");
+	}		
+	//Wall=MyWall;
+	//return MyWall;
 }
 
 
@@ -167,11 +243,16 @@ simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
 	SetTimer(SnowGatherRate,true,'SnowGatheringTimer');
+
+	//Timer that will make the wall grow
+	SetTimer(0.1,true,'ServerCreateWall');
+
 	//SpawnDefaultController();
 }
 
 defaultproperties
 {
+	bIsContructing=false;
 	defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
 	defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 	defaultAnimSet(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
