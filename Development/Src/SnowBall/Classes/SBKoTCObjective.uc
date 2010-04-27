@@ -44,13 +44,15 @@ simulated event PostBeginPlay()
 }
 
 /** Set initial state of this objective */
-simulated function SetInitialSate()
+simulated function SetInitialState()
 {
 	bIsBeingCaptured = false;
 	bIsNeutral = true;
 	bIsTied = true;
 
 	LastDefender = none;
+
+	super.SetInitialState();
 }
 
 /** Update nearby actors associated with this objective */
@@ -66,55 +68,52 @@ simulated function Tick(float DeltaTime)
 
 simulated function UpdateCaptureStatus(float DeltaTime)
 {
-	if ( !bIsNeutral )
+	// What is the current status?
+	if ( !bIsTied )
 	{
-		// What is the current status?
-		if ( !bIsTied )
+		// Red or Blue Team
+		if (bIsBeingCaptured)
 		{
-			// Red or Blue Team
-			if (bIsBeingCaptured)
+			if ( CurrentTeam == CaptureTeamIndex )
 			{
-				if ( CurrentTeam == CaptureTeamIndex )
-				{
-					// Capture Progress
-					`Log("SB Objective: Capture progress: "@CaptureProgress);
-					CaptureProgress += DeltaTime;
+				// Capture Progress
+				`Log("SB Objective: Capture progress: "@CaptureProgress);
+				CaptureProgress += DeltaTime;
 
-					if (CaptureProgress >= CaptureTime)
-					{
-						// Capture completed
-						`Log("SB Objective: Objective captured!");
-						SetTeam(CaptureTeamIndex);
-					}		
-				}
-				else
+				if (CaptureProgress >= CaptureTime)
 				{
-					`Log("SB Objective: Capture interrupted by enemy!");
-					bIsBeingCaptured = false;
-					CaptureProgress = 0;
-				}
+					// Capture completed
+					`Log("SB Objective: Objective captured!");
+					SetTeam(CaptureTeamIndex);
+				}		
 			}
 			else
 			{
-				// Is the controlling team not the owner?
-				if (bIsNeutral || (CurrentTeam != DefenderTeamIndex) )
-				{
-					`Log("SB Objective: Capture started by team "@CurrentTeam);
-					bIsBeingCaptured = true;
-					CaptureProgress = 0;
-					CaptureTeamIndex = CurrentTeam;
-				}
+				`Log("SB Objective: Capture interrupted by enemy!");
+				bIsBeingCaptured = false;
+				CaptureProgress = 0;
 			}
 		}
 		else
 		{
-			// Control tied
-			if (bIsBeingCaptured)
+			// Is the controlling team not the owner?
+			if (bIsNeutral || (CurrentTeam != DefenderTeamIndex) )
 			{
-				`Log("SB Objective: Objective control tied. Capture aborted.");
-				bIsBeingCaptured = false;
+				`Log("SB Objective: Capture started by team "@CurrentTeam);
+				bIsBeingCaptured = true;
 				CaptureProgress = 0;
+				CaptureTeamIndex = CurrentTeam;
 			}
+		}
+	}
+	else
+	{
+		// Control tied
+		if (bIsBeingCaptured)
+		{
+			`Log("SB Objective: Objective control tied. Capture aborted.");
+			bIsBeingCaptured = false;
+			CaptureProgress = 0;
 		}
 	}
 }
@@ -138,12 +137,12 @@ simulated function AreaCheckTimer()
 		{
 			if ( (Player.GetTeam()).TeamIndex == 0 )
 			{
-				`log("SB Objective: Player from team red");
+				//`log("SB Objective: Player from team red");
 				TeamRed = true;
 			}
 			else if ( (Player.GetTeam()).TeamIndex == 1 )
 			{
-				`log("SB Objective: Player from team blue");
+				//`log("SB Objective: Player from team blue");
 				TeamBlue = true;
 			}
 		}

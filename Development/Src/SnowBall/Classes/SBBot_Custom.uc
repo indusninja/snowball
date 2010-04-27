@@ -94,7 +94,7 @@ reliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 	local Rotator rot;
 
 	//bIsContructing=constructing;
-	`log("Construction: "@bIsContructing);
+	//`log("Construction: "@bIsContructing);
 	if(bIsContructing==true)
 	{
 		if(Wall==none)
