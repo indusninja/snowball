@@ -14,9 +14,7 @@ var config int WallConstructionCost;
 /*Function responsible of placing a Wall when the key X is pressed*/
 exec function ConstructWall()
 {
-	//bIsContructing=constructionActive;
 	SBBot_Custom(Pawn).StartConstructing();
-	//`log("Cagin tal");
 	PushState('CreateWall');
 }
 
@@ -36,19 +34,13 @@ state CreateWall
 
 	exec  function ConstructWall()
 	{
-		//`log("This is crap "@constr );
 		StopConstructingWall();
-		
-		//SBBot_Custom(self.pawn).ServerCreateWall(bIsContructing);
-		//bIsContructing=constructionActive;
 	}
 }
 
 simulated function PostBeginPlay() 
 {
 	super.PostBeginPlay();
-	//SetCameraMode('ThirdPerson');
-	//resetMesh();
 }
 
 // Sets the Pawns Mesh to the resources speced in the DefaultProperties
@@ -84,7 +76,6 @@ public function rSetCameraMode(name cameraSetting)
 
 DefaultProperties
 {
-	//defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
 	defaultMesh=SkeletalMesh'SB_CH_TestCharacter.Mesh.SK_SB_CH_TestCharacter'
 	defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 	defaultAnimSet(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'

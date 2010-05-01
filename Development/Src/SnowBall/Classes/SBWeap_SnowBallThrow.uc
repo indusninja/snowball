@@ -338,4 +338,6 @@ defaultproperties
 	//AIRating=0.65
 	//CurrentRating=0.65
 	//MaxDesireability=0.65
+
+	CrosshairImage=Texture2D'SB_GameHUD.HUD.SB_CrossHair'
 }
