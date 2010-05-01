@@ -49,7 +49,7 @@ unreliable server /*simulated*/ function StopConstructing()
 	if(Wall!=none)
 		Wall=none;
 	
-	`log("bIscontructing: "@bIsContructing);
+	//`log("bIscontructing: "@bIsContructing);
 
 }
 
@@ -57,7 +57,7 @@ unreliable server /*simulated*/ function StartConstructing()
 {
 	//if(!bIsContructing)
 		bIsContructing=true;
-	`log("bIscontructing: "@bIsContructing);
+	//`log("bIscontructing: "@bIsContructing);
 	//ServerCreateWall();
 }
 
@@ -94,7 +94,7 @@ unreliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 	local Rotator rot;
 
 	//bIsContructing=constructing;
-	`log("Construction: "@bIsContructing);
+	//`log("Construction: "@bIsContructing);
 	if(bIsContructing==true)
 	{
 		if(Wall==none)

@@ -33,6 +33,21 @@ var float CaptureDistance;
 /** last player to defend this node */
 var UTPlayerReplicationInfo LastDefender;
 
+/** Mesh of the objective */
+var SkeletalMeshComponent SkelMesh;
+
+/** Material for neutral state */
+var Material MaterialNeutral;
+
+/** Material for red team */
+var Material MaterialRed;
+
+/** Material for blue team */
+var Material MaterialBlue;
+
+/** Light environment for the flag */
+var DynamicLightEnvironmentComponent LightEnvironment;
+
 simulated event PostBeginPlay()
 {
 	// Init this
@@ -173,6 +188,19 @@ simulated function SetTeam(byte TeamIndex)
 	bIsNeutral = false;
 	bIsBeingCaptured = false;
 
+	if (TeamIndex == 0)
+	{
+		SkelMesh.SetMaterial(1,MaterialRed);
+	}
+	else if (TeamIndex == 1)
+	{
+		SkelMesh.SetMaterial(1,MaterialBlue);
+	}
+	else
+	{
+		SkelMesh.SetMaterial(1,MaterialNeutral);
+	}
+
 	super.SetTeam(TeamIndex);
 }
 
@@ -186,8 +214,44 @@ simulated function Reset()
 
 defaultproperties
 {
+	DefenderTeamIndex=2
 	CaptureTime=5.0
 	CaptureDistance=200
 	AreaCheckFrequency=0.5
 	bStatic=false
+
+	Begin Object Class=DynamicLightEnvironmentComponent Name=FlagLightEnvironment
+		bDynamic=FALSE
+	End Object
+	LightEnvironment=FlagLightEnvironment
+	Components.Add(FlagLightEnvironment)
+
+	MaterialNeutral=Material'SB_BaseGameType.Materials.M_CTF_Flag_IG_FlagNeutral'
+	MaterialRed=Material'CTF_Flag_IronGuard.Materials.M_CTF_Flag_IG_FlagRed'
+	MaterialBlue=Material'CTF_Flag_IronGuard.Materials.M_CTF_Flag_IG_FlagBlue'
+
+	Begin Object Class=SkeletalMeshComponent Name=FlagSkelMesh
+		CollideActors=false
+		BlockActors=false
+		PhysicsWeight=0
+		bHasPhysicsAssetInstance=true
+		BlockRigidBody=true
+		RBChannel=RBCC_Nothing
+		RBCollideWithChannels=(Default=FALSE,GameplayPhysics=FALSE,EffectPhysics=FALSE,Cloth=TRUE)
+		ClothRBChannel=RBCC_Cloth
+		LightEnvironment=FlagLightEnvironment
+		bUseAsOccluder=FALSE
+		bEnableClothSimulation=true
+		bAutoFreezeClothWhenNotRendered=true
+		bUpdateSkelWhenNotRendered=false
+		ClothWind=(X=20.0,Y=10.0)
+		bAcceptsDecals=false
+		Translation=(X=0.0,Y=0.0,Z=-40.0)
+		SkeletalMesh=SkeletalMesh'CTF_Flag_IronGuard.Mesh.S_CTF_Flag_IronGuard'
+		PhysicsAsset=PhysicsAsset'CTF_Flag_IronGuard.Mesh.S_CTF_Flag_IronGuard_Physics'
+		Materials(1)=Material'SB_BaseGameType.Materials.M_CTF_Flag_IG_FlagNeutral'
+	End Object
+
+	SkelMesh=FlagSkelMesh
+	Components.Add(FlagSkelMesh)
 }
