@@ -41,7 +41,7 @@ replication
 }
 
 
-reliable server /*simulated*/ function StopConstructing()
+unreliable server /*simulated*/ function StopConstructing()
 {
 	//if(bIsContructing)
 	bIsContructing=false;
@@ -53,7 +53,7 @@ reliable server /*simulated*/ function StopConstructing()
 
 }
 
-reliable server /*simulated*/ function StartConstructing()
+unreliable server /*simulated*/ function StartConstructing()
 {
 	//if(!bIsContructing)
 		bIsContructing=true;
@@ -88,13 +88,13 @@ simulated event ReplicatedEvent(name VarName)
 	}
 }
 
-reliable server /*simulated*/ function  ServerCreateWall(bool constructing)
+unreliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 {	
 	local vector loc;
 	local Rotator rot;
 
 	//bIsContructing=constructing;
-	//`log("Construction: "@bIsContructing);
+	`log("Construction: "@bIsContructing);
 	if(bIsContructing==true)
 	{
 		if(Wall==none)
@@ -152,6 +152,7 @@ simulated function /*SBActor_SnowWall*/ SpawnWall(bool construct)
 	else
 	{
 		Wall=none;
+		StopConstructing();
 		//`log("Deleting");
 	}		
 	//Wall=MyWall;
@@ -239,13 +240,22 @@ simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
 	Mesh.SetAnimTreeTemplate(defaultAnimTree);
 }
 
+
+reliable server function CallingBuildingConstructor()
+{
+	if(MaterialBelowFeet == GatheringMaterial && !bIsMoving)
+		ServerCreateWall(bIsContructing);
+
+}
+
+
 simulated event PostBeginPlay()
 {
 	super.PostBeginPlay();
 	SetTimer(SnowGatherRate,true,'SnowGatheringTimer');
 
 	//Timer that will make the wall grow
-	SetTimer(0.1,true,'ServerCreateWall');
+	SetTimer(0.15,true,'CallingBuildingConstructor');
 
 	//SpawnDefaultController();
 }

@@ -65,6 +65,7 @@ public function resetMesh()
 	if (LocalPlayer(Player)!=none)
 	{
 		coolShade = PostProcessChain'SB_PostProcessing.PostProcess.DunDefScenePostProcess';
+		LocalPlayer(Player).RemoveAllPostProcessingChains();
 		LocalPlayer(Player).InsertPostProcessingChain(coolShade,-1,false);
 	}
 }
