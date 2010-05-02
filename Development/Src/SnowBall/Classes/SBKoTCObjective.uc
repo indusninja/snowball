@@ -48,10 +48,27 @@ var Material MaterialBlue;
 /** Light environment for the flag */
 var DynamicLightEnvironmentComponent LightEnvironment;
 
+/** Replicate variables */
+simulated event ReplicatedEvent(name VarName)
+{
+	if (VarName == 'DefenderTeamIndex')
+	{
+		UpdateEffects();
+
+		Super.ReplicatedEvent(VarName);
+	}
+    else
+    {
+        Super.ReplicatedEvent(VarName);
+    }
+}
+
 simulated event PostBeginPlay()
 {
 	// Init this
-	SetInitialState();	
+	SetInitialState();
+
+	`Log("SB Objective: Remote role: "@Role);
 
 	// Only the server really needs to check
 	if (Role == ROLE_AUTHORITY)
@@ -62,79 +79,80 @@ simulated event PostBeginPlay()
 simulated function SetInitialState()
 {
 	bIsBeingCaptured = false;
-	bIsNeutral = true;
 	bIsTied = true;
-
 	LastDefender = none;
+
+	SetTeam(2);
 
 	super.SetInitialState();
 }
-
-/** Update nearby actors associated with this objective */
-simulated function UpdateCloseActors() {}
 
 /** Check states */
 simulated function Tick(float DeltaTime)
 {
 	Super.Tick(DeltaTime);	
-
+	
 	UpdateCaptureStatus(DeltaTime);
 }
 
-simulated function UpdateCaptureStatus(float DeltaTime)
+function UpdateCaptureStatus(float DeltaTime)
 {
-	// What is the current status?
-	if ( !bIsTied )
+	if (Role == ROLE_AUTHORITY)
 	{
-		// Red or Blue Team
-		if (bIsBeingCaptured)
+		// What is the current status?
+		if ( !bIsTied )
 		{
-			if ( CurrentTeam == CaptureTeamIndex )
+			// Red or Blue Team
+			if (bIsBeingCaptured)
 			{
-				// Capture Progress
-				`Log("SB Objective: Capture progress: "@CaptureProgress);
-				CaptureProgress += DeltaTime;
-
-				if (CaptureProgress >= CaptureTime)
+				if ( CurrentTeam == CaptureTeamIndex )
 				{
-					// Capture completed
-					`Log("SB Objective: Objective captured!");
-					SetTeam(CaptureTeamIndex);
-				}		
+					// Capture Progress
+					//`Log("SB Objective: Capture progress: "@CaptureProgress);
+					CaptureProgress += DeltaTime;
+
+					if (CaptureProgress >= CaptureTime)
+					{
+						// Capture completed
+						`Log("SB Objective: Objective captured by team "@CaptureTeamIndex);
+						SetTeam(CaptureTeamIndex);
+						bIsBeingCaptured = false;
+					}		
+				}
+				else
+				{
+					`Log("SB Objective: Capture interrupted by enemy!");
+					bIsBeingCaptured = false;
+					CaptureProgress = 0;
+				}
 			}
 			else
 			{
-				`Log("SB Objective: Capture interrupted by enemy!");
-				bIsBeingCaptured = false;
-				CaptureProgress = 0;
+				// Is the controlling team not the owner?
+				if (bIsNeutral || (CurrentTeam != DefenderTeamIndex) )
+				{
+					`Log("SB Objective: Capture started by team "@CurrentTeam);
+					bIsBeingCaptured = true;
+					CaptureProgress = 0;
+					CaptureTeamIndex = CurrentTeam;
+				}
 			}
 		}
 		else
 		{
-			// Is the controlling team not the owner?
-			if (bIsNeutral || (CurrentTeam != DefenderTeamIndex) )
+			// Control tied
+			if (bIsBeingCaptured)
 			{
-				`Log("SB Objective: Capture started by team "@CurrentTeam);
-				bIsBeingCaptured = true;
+				`Log("SB Objective: Objective control tied. Capture aborted.");
+				bIsBeingCaptured = false;
 				CaptureProgress = 0;
-				CaptureTeamIndex = CurrentTeam;
 			}
-		}
-	}
-	else
-	{
-		// Control tied
-		if (bIsBeingCaptured)
-		{
-			`Log("SB Objective: Objective control tied. Capture aborted.");
-			bIsBeingCaptured = false;
-			CaptureProgress = 0;
 		}
 	}
 }
 
 /** Check for players in the area and determine capture progress */
-simulated function AreaCheckTimer()
+function AreaCheckTimer()
 {
 	local SBBot_Custom Player;
 	local float Distance;
@@ -144,7 +162,7 @@ simulated function AreaCheckTimer()
 	TeamRed = false;
 	TeamBlue = false;
 
-	foreach AllActors(class'SBBot_Custom', Player)
+	foreach DynamicActors(class'SBBot_Custom', Player)
 	{
 		Distance = VSize(Player.Location - Location);
 
@@ -185,14 +203,27 @@ simulated function AreaCheckTimer()
 /** Set the new defending team */
 simulated function SetTeam(byte TeamIndex)
 {
-	bIsNeutral = false;
-	bIsBeingCaptured = false;
+	if (TeamIndex == 0 || TeamIndex == 1)
+		bIsNeutral = false;
+	else
+		bIsNeutral = true;
 
-	if (TeamIndex == 0)
+	super.SetTeam(TeamIndex);
+}
+
+/** Update effects associated with the objective (color, etc) */
+simulated function UpdateEffects()
+{
+    if ( WorldInfo.NetMode == NM_DedicatedServer )
+        return;
+
+	`Log("SB Objective: Mesh updated!");
+
+	if (DefenderTeamIndex == 0)
 	{
 		SkelMesh.SetMaterial(1,MaterialRed);
 	}
-	else if (TeamIndex == 1)
+	else if (DefenderTeamIndex == 1)
 	{
 		SkelMesh.SetMaterial(1,MaterialBlue);
 	}
@@ -200,23 +231,22 @@ simulated function SetTeam(byte TeamIndex)
 	{
 		SkelMesh.SetMaterial(1,MaterialNeutral);
 	}
-
-	super.SetTeam(TeamIndex);
 }
 
 /** Reset the objective */
 simulated function Reset()
 {
 	SetInitialState();
-
-	UpdateCloseActors();
 }
 
 defaultproperties
 {
+	RemoteRole=ROLE_SimulatedProxy
+	bAlwaysRelevant=true
 	DefenderTeamIndex=2
 	CaptureTime=5.0
 	CaptureDistance=200
+	NetUpdateFrequency = 10.0
 	AreaCheckFrequency=0.5
 	bStatic=false
 
