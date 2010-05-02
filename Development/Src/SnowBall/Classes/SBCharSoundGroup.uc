@@ -8,8 +8,8 @@ class SBCharSoundGroup extends UTPawnSoundGroup
 defaultproperties
 {
 	GaspSound=SoundCue'A_Character_IGMale_Cue.Efforts.A_Effort_IGMale_MaleDrowning_Cue'
-	DoubleJumpSound=SoundCue'SB_Audio.SB_A_ImpactClothing_Cue'
-	DefaultJumpingSound=SoundCue'SB_Audio.SB_A_ImpactClothing_Cue'
+	DoubleJumpSound=SoundCue'SB_Audio.SB_A_NullSound_Cue'
+	DefaultJumpingSound=SoundCue'SB_Audio.SB_A_NullSound_Cue'
 
 	FootstepSounds[0]=(MaterialType=Stone,Sound=SoundCue'A_Character_Footsteps.FootSteps.A_Character_Footstep_StoneCue')
 	FootstepSounds[9]=(MaterialType=Snow,Sound=SoundCue'A_Character_Footsteps.FootSteps.A_Character_Footstep_SnowCue')

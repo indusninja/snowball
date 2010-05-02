@@ -150,5 +150,6 @@ defaultproperties
 
 	bNetTemporary=false
 	AmbientSound=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireTravelCue'
-	ExplosionSound=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireImpactCue'
+	//ExplosionSound=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireImpactCue'
+	ExplosionSound=SoundCue'SB_Audio.SB_A_Impact.SB_A_ImpactSnow_Cue'
 }

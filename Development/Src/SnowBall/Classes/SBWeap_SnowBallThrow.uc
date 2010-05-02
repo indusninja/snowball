@@ -315,12 +315,19 @@ defaultproperties
 	Components.Add(ChargePart)
 
 	/** Sounds */
-	WeaponFireSnd[0]=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_FireCue'
-	WeaponFireSnd[1]=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_FireCue'
-	WeaponLoadSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireCue'
-	WeaponEquipSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_RaiseCue'
-	WeaponPutDownSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_LowerCue'
-	PickupSound=SoundCue'A_Pickups.Weapons.Cue.A_Pickup_Weapons_Shock_Cue'
+	//WeaponFireSnd[0]=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_FireCue'
+	//WeaponFireSnd[1]=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_FireCue'
+	//WeaponLoadSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_AltFireCue'
+	//WeaponEquipSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_RaiseCue'
+	//WeaponPutDownSnd=SoundCue'A_Weapon_ShockRifle.Cue.A_Weapon_SR_LowerCue'
+	//PickupSound=SoundCue'A_Pickups.Weapons.Cue.A_Pickup_Weapons_Shock_Cue'
+
+	WeaponFireSnd[0]=SoundCue'SB_Audio.SB_A_Throw.SB_A_ThrowForth_Cue'
+	WeaponFireSnd[1]=SoundCue'SB_Audio.SB_A_NullSound_Cue'
+	WeaponLoadSnd=SoundCue'SB_Audio.SB_A_NullSound_Cue'
+	WeaponEquipSnd=SoundCue'SB_Audio.SB_A_NullSound_Cue'
+	WeaponPutDownSnd=SoundCue'SB_Audio.SB_A_NullSound_Cue'
+	PickupSound=SoundCue'SB_Audio.SB_A_NullSound_Cue'
 
 	/** Inventory properties */
 	bCanThrow=false
