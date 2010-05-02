@@ -207,16 +207,17 @@ simulated function SetTeam(byte TeamIndex)
 		bIsNeutral = false;
 	else
 		bIsNeutral = true;
-
+	
 	super.SetTeam(TeamIndex);
+
+	UpdateEffects();
+
+	bForceNetUpdate = true;
 }
 
 /** Update effects associated with the objective (color, etc) */
 simulated function UpdateEffects()
 {
-    if ( WorldInfo.NetMode == NM_DedicatedServer )
-        return;
-
 	`Log("SB Objective: Mesh updated!");
 
 	if (DefenderTeamIndex == 0)
@@ -246,7 +247,7 @@ defaultproperties
 	DefenderTeamIndex=2
 	CaptureTime=5.0
 	CaptureDistance=200
-	NetUpdateFrequency = 10.0
+	NetUpdateFrequency = 1.0
 	AreaCheckFrequency=0.5
 	bStatic=false
 
