@@ -8,13 +8,16 @@ var config name WallMeshName;
 simulated function PostBeginPlay()
 {
 	super.PostBeginPlay();
+	//LifeSpan=50.0;
+	
+	
 }
 
 
 
 defaultproperties
 {
-
+	bCollideActors=TRUE
 	bCollideWorld=true
 	bProjTarget=TRUE
 	bPathColliding=true
@@ -24,7 +27,7 @@ defaultproperties
 
 
     Begin Object Name=FracturedStaticMeshComponent0 
-        StaticMesh=FracturedStaticMesh'SB_BaseGameType.Mesh.SB_SnowWall_Fractured'
+        StaticMesh=FracturedStaticMesh'SB_BaseGameType.Mesh.Player_SnowWall_FRACTURED'
     End Object
 
 	Components.Add(FracturedStaticMeshComponent0)

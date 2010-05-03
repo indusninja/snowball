@@ -29,6 +29,9 @@ var repnotify bool bIsContructing;
 var config int WallConstructionCost;
 var config int WallInitialDepth;
 
+var config float WallLifeSpan;
+
+
 replication
 {
 	//If I'm the server I replicate the location and rotation to the clients
@@ -83,8 +86,7 @@ simulated event ReplicatedEvent(name VarName)
 		`log("Replicating Wall...");
 		ClientMessage("Spawning client wall");
 		if(bIsContructing)
-		/*Wall=*/SpawnWall(bIsContructing);
-		//Wall=GrowingWall();
+		SpawnWall(bIsContructing);
 	}
 }
 
@@ -92,9 +94,10 @@ unreliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 {	
 	local vector loc;
 	local Rotator rot;
+	local int increaseWall;
 
-	//bIsContructing=constructing;
-	//`log("Construction: "@bIsContructing);
+	increaseWall=195/5;
+
 	if(bIsContructing==true)
 	{
 		if(Wall==none)
@@ -115,48 +118,48 @@ unreliable server /*simulated*/ function  ServerCreateWall(bool constructing)
 				Destination=loc;
 
 				//Calling the simulated function that it's goin to spawn both in client and server the wall
-				/*Wall=*/SpawnWall(constructing);
+				SpawnWall(constructing);
 				
-				Weapon.AddAmmo(-1*WallConstructionCost);
 			}
 		}else
 			{
-			//`log("Client grows the wall??");
 
 				////Updating replicated variables data
 				WallRotation=Wall.Rotation;
-				Destination.Z= Wall.Location.Z + 6;
+				Destination.Z= Wall.Location.Z + increaseWall;
 
 				if(Destination.Z < self.Location.Z - 50)
 					Wall.Destroy();
 
-				//Wall=none;
-				///*Wall=*/GrowingWall();
 				SpawnWall(constructing);
 			}
 	}
-	//else
-	//	Wall=none;
 }
 
 /*Function simulated on the server so it knows where to Spawn the wall*/
-simulated function /*SBActor_SnowWall*/ SpawnWall(bool construct)
+simulated function  SpawnWall(bool construct)
 {
-	if((Destination.Z < self.Location.Z - 50) && bIsContructing)
+	//Wall1 height 85
+	//Wall2 height 195
+
+
+	if((Destination.Z < self.Location.Z - 50) && bIsContructing && !bIsMoving && !bIsCrouched)
 	{
 		Wall.Destroy();
 		if((Destination.X!=0 || Destination.Y!=0 || Destination.Z!=0)&&
 			(WallRotation!=Rotation))
-				Wall=WorldInfo.Spawn(class'SnowBall.SBActor_SnowWall',Owner,,Destination,WallRotation);
+				Wall=WorldInfo.Spawn(class'SnowBall.SBActor_SnowWall',Owner,,Destination);
+		
+				UTInventoryManager(InvManager).AddAmmoToWeapon(-1,class'SnowBall.SBWeap_SnowBallThrow');
+				Wall.LifeSpan=WallLifeSpan;
+
 	}
 	else
 	{
 		Wall=none;
 		StopConstructing();
-		//`log("Deleting");
 	}		
-	//Wall=MyWall;
-	//return MyWall;
+
 }
 
 
