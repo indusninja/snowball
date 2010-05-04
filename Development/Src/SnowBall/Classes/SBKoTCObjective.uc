@@ -66,7 +66,7 @@ simulated event ReplicatedEvent(name VarName)
 simulated event PostBeginPlay()
 {
 	// Init this
-	SetInitialState();
+	//SetInitialState();
 
 	`Log("SB Objective: Remote role: "@Role);
 
@@ -257,9 +257,9 @@ defaultproperties
 	LightEnvironment=FlagLightEnvironment
 	Components.Add(FlagLightEnvironment)
 
-	MaterialNeutral=Material'SB_BaseGameType.Materials.M_CTF_Flag_IG_FlagNeutral'
-	MaterialRed=Material'CTF_Flag_IronGuard.Materials.M_CTF_Flag_IG_FlagRed'
-	MaterialBlue=Material'CTF_Flag_IronGuard.Materials.M_CTF_Flag_IG_FlagBlue'
+	MaterialNeutral=Material'SB_CaptureGameType.Materials.M_SB_Flag_FlagNeutral'
+	MaterialRed=Material'SB_CaptureGameType.Materials.M_SB_Flag_FlagRed'
+	MaterialBlue=Material'SB_CaptureGameType.Materials.M_SB_Flag_FlagBlue'
 
 	Begin Object Class=SkeletalMeshComponent Name=FlagSkelMesh
 		CollideActors=false
@@ -280,7 +280,7 @@ defaultproperties
 		Translation=(X=0.0,Y=0.0,Z=-40.0)
 		SkeletalMesh=SkeletalMesh'CTF_Flag_IronGuard.Mesh.S_CTF_Flag_IronGuard'
 		PhysicsAsset=PhysicsAsset'CTF_Flag_IronGuard.Mesh.S_CTF_Flag_IronGuard_Physics'
-		Materials(1)=Material'SB_BaseGameType.Materials.M_CTF_Flag_IG_FlagNeutral'
+		Materials(1)=Material'SB_CaptureGameType.Materials.M_SB_Flag_FlagNeutral'
 	End Object
 
 	SkelMesh=FlagSkelMesh
