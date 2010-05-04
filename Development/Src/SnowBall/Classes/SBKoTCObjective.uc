@@ -53,6 +53,7 @@ simulated event ReplicatedEvent(name VarName)
 {
 	if (VarName == 'DefenderTeamIndex')
 	{
+		`Log("SB Objective: DefenderTeamIndex Replicated");
 		UpdateEffects();
 
 		Super.ReplicatedEvent(VarName);
@@ -78,13 +79,15 @@ simulated event PostBeginPlay()
 /** Set initial state of this objective */
 simulated function SetInitialState()
 {
+	`Log("SB Objective: Set Initial State");
+
+	super.SetInitialState();
+
 	bIsBeingCaptured = false;
 	bIsTied = true;
 	LastDefender = none;
 
 	SetTeam(2);
-
-	super.SetInitialState();
 }
 
 /** Check states */
@@ -203,6 +206,8 @@ function AreaCheckTimer()
 /** Set the new defending team */
 simulated function SetTeam(byte TeamIndex)
 {
+	`Log("SB Objective: Setting team to "@TeamIndex);
+
 	if (TeamIndex == 0 || TeamIndex == 1)
 		bIsNeutral = false;
 	else

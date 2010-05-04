@@ -135,10 +135,10 @@ function Reset()
 	local int i;
 	local UTPlayerReplicationInfo PRI;
 
-	for (i = 0; i < KotCObjectives.length; i++)
+	/*for (i = 0; i < KotCObjectives.length; i++)
 	{
 		KotCObjectives[i].Reset();
-	}
+	}*/
 
 	Super.Reset();
 	
