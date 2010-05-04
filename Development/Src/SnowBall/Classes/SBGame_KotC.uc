@@ -5,15 +5,51 @@ class SBGame_KotC extends UTTeamGame
 /** List of objectives in level */
 var array<SBKotCObjective> KotCObjectives;
 var SBKotCObjective_Castle KotCCastle;
-
 var SBPlayerController_ThirdPerson currentPlayer;
-
 var config bool IsThirdPerson;
+
+var array<string> playerNames;
+
+event PostLogin ( playerController NewPlayer )
+{
+	local string playerName;
+	local int randOutput;
+	
+	playerName = NewPlayer.GetHumanReadableName();
+
+	//`Log("Current Player is on Team: "@string(NewPlayer.GetTeamNum()));
+	//`Log("Current Player's Family: "@string(Teams[NewPlayer.GetTeamNum()].get));
+	//`Log("Current Player's Faction: "@TeamFactions[NewPlayer.GetTeamNum()]);
+
+	Super.PostLogin(NewPlayer);
+
+	if(InStr(playerName, "player", false, true, 0)!=-1)
+	{
+		randOutput = Rand(playerNames.Length - 1);
+		//`Log("Number of Random Names: "@playerNames.Length);
+		playerName = playerNames[randOutput];
+		//`Log("Changing Player Name to: "@playerName);
+		ChangeName( NewPlayer, playerName, false );
+	}
+}
+
+function PreBeginPlay()
+{
+	Super.PreBeginPlay();
+
+	CreateTeam(0);
+	CreateTeam(1);
+	Teams[0].AI.EnemyTeam = Teams[1];
+	Teams[1].AI.EnemyTeam = Teams[0];
+	
+	//`Log("PreBeginPlay SBGAME_KOTC");
+}
 
 /** Stuff to do once play begins */
 simulated function PostBeginPlay() 
 {
 	local UTGame Game;
+
 	Super.PostBeginPlay();
 	Game = UTGame(WorldInfo.Game);
 	if (Game != None)
@@ -27,7 +63,27 @@ event InitGame(string Options, out string ErrorMessage)
 {
 	local SBKotCObjective Objective;
 
+	playerNames.AddItem("Klaus");
+	playerNames.AddItem("Orestis");
+	playerNames.AddItem("Sune");
+	playerNames.AddItem("Simon");
+	playerNames.AddItem("Martin");
+	playerNames.AddItem("Juan");
+	playerNames.AddItem("Prakash");
+	playerNames.AddItem("Alex");
+	playerNames.AddItem("Paul");
+	playerNames.AddItem("Hans");
+	playerNames.AddItem("Søren");
+	playerNames.AddItem("Gabrielle");
+	playerNames.AddItem("Aske");
+	playerNames.AddItem("Ben");
+	playerNames.AddItem("Michael");
+	playerNames.AddItem("Jack");
+
 	Super.InitGame(Options, ErrorMessage);
+
+	/*TeamFactions[0] = "Kids";
+	TeamFactions[1] = "Kids";*/
 
 	// Find objectives present in level
 	foreach AllActors(class'SBKotCObjective', Objective)
@@ -61,6 +117,20 @@ function InitObjectives()
 				`Log("KotC: Multiple castles found!!",,'error');
 		}
 	}
+}
+
+/* create a player team, and fill from the team roster
+*/
+function CreateTeam(int TeamIndex)
+{
+	Teams[TeamIndex] = spawn(class'SnowBall.SBTeamInfo');
+	Teams[TeamIndex].Faction = TeamFactions[TeamIndex];
+	Teams[TeamIndex].Initialize(TeamIndex);
+	Teams[TeamIndex].AI = Spawn(TeamAIType[TeamIndex]);
+	Teams[TeamIndex].AI.Team = Teams[TeamIndex];
+	GameReplicationInfo.SetTeam(TeamIndex, Teams[TeamIndex]);
+	Teams[TeamIndex].AI.SetObjectiveLists();
+	//`Log("CreateTeam "@TeamIndex@" SBGAME_KOTC");
 }
 
 /** Set what to focus on at the end of the game */

@@ -4,7 +4,6 @@
  */
 class SBCharInfo extends UTCharInfo;
 
-
 defaultproperties
 {
 	Families.Remove(class'UTFamilyInfo_Liandri_Male')

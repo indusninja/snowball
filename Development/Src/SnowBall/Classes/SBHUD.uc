@@ -4,7 +4,6 @@ class SBHUD extends UTHUD
 	config(SnowBall);
 
 var Texture2D HUDBaseTex;
-var Texture2D CrossHairTex;
 
 var config Vector2D ThermometerTexPosition;
 var config Vector2D ThermometerTexSize;
@@ -26,6 +25,7 @@ function DrawGameHud()
 	local Vector2D thermometerFillDrawResolvedPosition;
 	local Vector2D ammoDrawBasePosition;
 	local Vector2D ammoDrawResolvedPosition;
+	local Color teamColor;
 
 	thermometerDrawBasePosition.X = 0;
 	thermometerDrawBasePosition.Y = 768 - (ThermometerTexSize.Y * ThermometerScale.Y) - 20;
@@ -44,11 +44,11 @@ function DrawGameHud()
 		if(PlayerOwner.Pawn != none && PawnOwner != none)
 		{
 			DrawBar("Health", PlayerOwner.Pawn.Health, PlayerOwner.Pawn.HealthMax, 20, 20, 200, 80, 80);
-			DrawBar("Ammo", UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, 20, 40, 80, 80, 200);
+			//DrawBar("Ammo", UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, 20, 40, 80, 80, 200);
 			DrawThermometerFill(PlayerOwner.Pawn.Health, thermometerFillDrawResolvedPosition.X, thermometerFillDrawResolvedPosition.Y);
 			DrawThermometer(thermometerDrawResolvedPosition.X, thermometerDrawResolvedPosition.Y);
-			DrawAmmo(UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, ammoDrawResolvedPosition.X, ammoDrawResolvedPosition.Y);
-			//DrawCrosshair();
+			teamColor = PawnOwner.GetTeam().GetHUDColor();
+			DrawAmmo(UTWeapon(PawnOwner.Weapon).AmmoCount, UTWeapon(PawnOwner.Weapon).MaxAmmoCount, ammoDrawResolvedPosition.X, ammoDrawResolvedPosition.Y, teamColor);
 		}
     }
 }
@@ -106,7 +106,7 @@ function DrawThermometer(int X, int Y)
 	Canvas.DrawTile(HUDBaseTex, ThermometerTexSize.X * ThermometerScale.X, ThermometerTexSize.Y * ThermometerScale.Y, ThermometerTexPosition.X, ThermometerTexPosition.Y, ThermometerTexSize.X, ThermometerTexSize.Y);
 }
 
-function DrawAmmo(int value, int maxValue, int X, int Y)
+function DrawAmmo(int value, int maxValue, int X, int Y, Color teamColor)
 {
 	local string Amount;
 
@@ -122,7 +122,7 @@ function DrawAmmo(int value, int maxValue, int X, int Y)
 
 	Canvas.Reset();
 	Canvas.SetPos(X + SnowAmmoTexSize.X + CrossTexSize.X + 10, Y + (SnowAmmoTexSize.Y / 2) - (TextBackSize.Y / 2));
-	Canvas.SetDrawColor(255, 255, 255, 255);
+	Canvas.SetDrawColor(teamColor.R, teamColor.G, teamColor.B, 255);
 	Canvas.DrawTile(HUDBaseTex, TextBackSize.X, TextBackSize.Y, TextBackPosition.X, TextBackPosition.Y, TextBackSize.X, TextBackSize.Y);
 
 	Amount = ""$value;
@@ -137,28 +137,7 @@ function DrawAmmo(int value, int maxValue, int X, int Y)
 	Canvas.DrawText(Amount, , 0.8,0.8);
 }
 
-/*function DrawCrosshair()
-{
-	local Vector2D position;
-	local Vector2D resolvedPosition;
-	local Vector2D size;
-	
-	size.X = 256;
-	size.Y = 256;
-
-	position.X = (1024 / 2);
-	position.Y = (768 / 2);
-
-	resolvedPosition = ResolveHUDPosition(position, size.X, size.Y);
-
-	Canvas.Reset();
-	Canvas.SetPos(resolvedPosition.X, resolvedPosition.Y);
-	Canvas.SetDrawColor(255, 255, 255, 255);
-	Canvas.DrawTile(CrossHairTex, size.X, size.Y, resolvedPosition.X, resolvedPosition.Y, size.X, size.Y);
-}*/
-
 defaultproperties
 {
 	HUDBaseTex=Texture2D'SB_GameHUD.HUD.SB_BaseHUD'
-	//CrossHairTex=Texture2D'SB_GameHUD.HUD.SB_CrossHair'
 }

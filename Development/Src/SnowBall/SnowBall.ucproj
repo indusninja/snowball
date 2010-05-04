@@ -84,6 +84,9 @@
     <Compile Include="Classes\SBProj_SnowBall.uc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\SBTeamInfo.uc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Classes\SBWeap_SnowBallThrow.uc">
       <SubType>Code</SubType>
     </Compile>
