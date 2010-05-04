@@ -60,10 +60,16 @@
     <Compile Include="Classes\SBBot_Custom.uc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\SBCharInfo.uc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Classes\SBCharSoundGroup.uc">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\SBDmgType_SnowBall.uc">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\SBFamilyInfo.uc">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\SBHUD.uc">

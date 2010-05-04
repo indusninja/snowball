@@ -266,7 +266,8 @@ simulated event PostBeginPlay()
 defaultproperties
 {
 	bIsContructing=false;
-	defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
+	//defaultMesh=SkeletalMesh'CH_IronGuard_Male.Mesh.SK_CH_IronGuard_MaleA'
+	defaultMesh=SkeletalMesh'SB_Characters.Mesh.SK_CH_TestCharacter'
 	defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
 	defaultAnimSet(0)=AnimSet'CH_AnimHuman.Anims.K_AnimHuman_BaseMale'
 	defaultPhysicsAsset=PhysicsAsset'CH_AnimCorrupt.Mesh.SK_CH_Corrupt_Male_Physics'
